@@ -111,7 +111,7 @@ function HomeContent() {
                           <Star key={i} className="h-3.5 w-3.5 fill-primary text-primary" />
                         ))}
                       </div>
-                      <span className="font-medium text-foreground">Trusted by 50,000+ RVers</span>
+                      <span className="font-medium text-foreground">Free to list • No hidden fees</span>
                     </div>
                   </div>
 
@@ -123,7 +123,7 @@ function HomeContent() {
                     marketplace
                   </h1>
                   <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 max-w-lg text-lg text-muted-foreground [animation-delay:200ms] sm:mt-5">
-                    Join thousands of happy adventurers who found their perfect RV
+                    Find your perfect RV or list yours for sale—simple and transparent.
                   </p>
 
                   {/* Search Box */}
@@ -236,13 +236,8 @@ function HomeContent() {
                             </div>
                           </div>
                           <div>
-                            <p className="text-sm font-semibold text-foreground">Join 50,000+ happy RVers</p>
-                            <div className="flex items-center gap-1">
-                              {[...Array(5)].map((_, i) => (
-                                <Star key={i} className="h-3 w-3 fill-primary text-primary" />
-                              ))}
-                              <span className="ml-1 text-xs text-muted-foreground">4.9/5 rating</span>
-                            </div>
+                            <p className="text-sm font-semibold text-foreground">Your next adventure starts here</p>
+                            <span className="text-xs text-muted-foreground">Simple, transparent marketplace</span>
                           </div>
                         </div>
                       </div>
@@ -323,7 +318,7 @@ function HomeContent() {
           <section className="bg-muted/50 px-4 py-16 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-6xl">
               <h2 className="mb-4 text-center text-2xl font-bold text-foreground">
-                Trusted by RV enthusiasts everywhere
+                What RVers are saying
               </h2>
               <p className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
                 Real stories from real people who found their perfect RV
@@ -377,8 +372,7 @@ function HomeContent() {
                       Ready to sell your RV?
                     </h2>
                     <p className="mt-3 text-primary-foreground/90">
-                      List your RV in minutes and reach thousands of qualified buyers. 
-                      Get the best price with our trusted marketplace.
+                      List your RV in minutes. Free to list, no hidden fees—just a simple way to connect with buyers.
                     </p>
                     <Button size="lg" variant="secondary" className="mt-6" asChild>
                       <Link href="/dashboard">
