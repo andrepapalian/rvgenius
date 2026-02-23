@@ -117,14 +117,8 @@ function HomeContent() {
 
                   <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:mt-6 lg:text-5xl xl:text-6xl xl:leading-[1.1] [animation-delay:100ms]">
                     Shop the{" "}
-                    <span className="relative inline-block">
-                      <span className="relative z-10 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                        #1 RV
-                      </span>
-                      <span
-                        className="absolute -bottom-1 left-0 right-0 z-0 h-3 bg-primary/20"
-                        style={{ transform: "skewY(-1deg)" }}
-                      />
+                    <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                      #1 RV
                     </span>{" "}
                     marketplace
                   </h1>
@@ -262,15 +256,15 @@ function HomeContent() {
 
         {/* Budget Calculator Section */}
         {!hasSearch && (
-          <section className="bg-muted/50 px-4 py-16 sm:px-6 lg:px-8">
+          <section className="relative overflow-hidden bg-white px-4 py-16 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-6xl">
-              <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
+              <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 lg:items-center">
                 <div className="flex flex-col justify-center">
                   <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
                     What can I afford?
                   </h2>
                   <p className="mt-3 text-muted-foreground">
-                    Use our budget calculator to find RVs that fit your monthly payment. 
+                    Use our budget calculator to find RVs that fit your monthly payment.
                     Simply enter what you want to pay each month, and we'll show you your total budget.
                   </p>
                   <div className="mt-8">
