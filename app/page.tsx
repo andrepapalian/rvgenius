@@ -21,12 +21,12 @@ import {
 } from "@/components/ui/select"
 
 const rvCategories = [
-  { id: "class-a", label: "Class A", image: "/images/rv-hero.jpg" },
-  { id: "class-b", label: "Class B", image: "/images/rv-hero.jpg" },
-  { id: "class-c", label: "Class C", image: "/images/rv-hero.jpg" },
-  { id: "travel-trailer", label: "Travel Trailers", image: "/images/rv-hero.jpg" },
-  { id: "fifth-wheel", label: "Fifth Wheels", image: "/images/rv-hero.jpg" },
-  { id: "toy-hauler", label: "Toy Haulers", image: "/images/rv-hero.jpg" },
+  { id: "class-a", label: "Class A", image: "/images/categories/class-a.jpg" },
+  { id: "class-b", label: "Class B", image: "/images/categories/class-b.jpg" },
+  { id: "class-c", label: "Class C", image: "/images/categories/class-c.jpg" },
+  { id: "travel-trailer", label: "Travel Trailers", image: "/images/categories/travel-trailer.jpg" },
+  { id: "fifth-wheel", label: "Fifth Wheels", image: "/images/categories/fifth-wheel.jpg" },
+  { id: "toy-hauler", label: "Toy Haulers", image: "/images/categories/toy-hauler.jpg" },
 ]
 
 const testimonials = [
@@ -285,7 +285,7 @@ function HomeContent() {
         {!hasSearch && (
           <section className="bg-card px-4 py-12 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-6xl">
-              <h2 className="mb-6 text-center text-xl font-bold text-foreground">
+              <h2 className="mb-8 text-center text-xl font-bold text-foreground sm:text-2xl">
                 Browse by body type
               </h2>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
@@ -293,17 +293,19 @@ function HomeContent() {
                   <Link
                     key={category.id}
                     href={`/?type=${category.id}`}
-                    className="group flex flex-col items-center rounded-xl border border-border bg-card p-4 transition-all hover:border-primary hover:shadow-md"
+                    className="group flex flex-col items-center"
                   >
-                    <div className="relative mb-3 h-16 w-full overflow-hidden rounded-lg">
+                    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl shadow-sm transition-shadow duration-300 group-hover:shadow-lg">
                       <Image
-                        src={category.image || "/placeholder.svg"}
-                        alt={category.label}
+                        src={category.image}
+                        alt={`${category.label} RV side profile`}
                         fill
-                        className="object-cover transition-transform group-hover:scale-105"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                     </div>
-                    <span className="text-sm font-medium text-foreground">
+                    <span className="mt-3 text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
                       {category.label}
                     </span>
                   </Link>
