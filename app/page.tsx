@@ -499,6 +499,7 @@ function SearchResultsSection({
   initialQuery: string
   initialMaxPrice: string
 }) {
+  const router = useRouter()
   const [searchText, setSearchText] = useState(initialQuery)
   const [selectedType, setSelectedType] = useState(initialType)
   const [priceRange, setPriceRange] = useState(() => {
@@ -547,7 +548,8 @@ function SearchResultsSection({
     setMinSleeps("")
     setDealOnly(false)
     setSearchText("")
-  }, [])
+    router.replace("/?all=true", { scroll: false })
+  }, [router])
 
   const filteredListings = useMemo(() => {
     const range = priceRanges[priceRange]
