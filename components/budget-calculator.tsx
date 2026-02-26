@@ -68,7 +68,7 @@ export function BudgetCalculator() {
             {formatCurrency(totalBudget)}
           </p>
           <p className="mt-1 text-xs text-muted-foreground sm:text-sm">
-            {interestRate}% APR · {loanTerm / 12} year{loanTerm / 12 !== 1 ? "s" : ""}
+            {interestRate}% APR · {loanTerm} month{loanTerm !== 1 ? "s" : ""}
           </p>
         </div>
 
@@ -188,7 +188,7 @@ export function BudgetCalculator() {
                     }
                   `}
                 >
-                  {term / 12} yr
+                  {term} mo
                 </button>
               ))}
             </div>

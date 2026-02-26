@@ -10,7 +10,7 @@ interface RVCardProps {
   listing: RVListing
 }
 
-function getDealBadge(deal: string) {
+function getDealBadge(deal?: string) {
   switch (deal) {
     case "great":
       return { label: "Great Deal", className: "bg-[#00a651] text-white" }
@@ -41,7 +41,7 @@ export function RVCard({ listing }: RVCardProps) {
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         {dealBadge && (
-          <div className={`absolute left-3 top-3 rounded px-2 py-1 text-xs font-bold ${dealBadge.className}`}>
+          <div className={`absolute left-3 top-3 rounded-md px-2.5 py-1 text-xs font-bold shadow-sm ${dealBadge.className}`}>
             {dealBadge.label}
           </div>
         )}
