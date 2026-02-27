@@ -183,7 +183,7 @@ export function BudgetCalculator() {
                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
                     ${
                       loanTerm === term
-                        ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
+                        ? "bg-primary text-primary-foreground"
                         : "bg-muted/80 text-muted-foreground hover:bg-muted"
                     }
                   `}

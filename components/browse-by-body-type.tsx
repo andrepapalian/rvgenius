@@ -11,46 +11,33 @@ export function BrowseByBodyType() {
         <h2 className="mb-8 text-center text-xl font-bold text-foreground sm:text-2xl">
           Browse by body type
         </h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          <Link href="/?all=true" className="group flex flex-col items-center">
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border-2 border-primary/30 bg-muted shadow-sm transition-shadow duration-300 group-hover:shadow-lg">
-              <Image
-                src={rvCategories[0]?.image ?? "/images/rv-hero.jpg"}
-                alt="All RV types"
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                className="object-cover opacity-90 transition-transform duration-500 ease-out group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              <span className="absolute bottom-2 left-2 right-2 text-center text-sm font-semibold text-white drop-shadow-md">
-                Any type
-              </span>
-            </div>
-            <span className="mt-3 text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
-              Any type
-            </span>
-          </Link>
-          {rvCategories.map((category) => (
-            <Link
-              key={category.id}
-              href={`/?type=${category.id}`}
-              className="group flex flex-col items-center"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl shadow-sm transition-shadow duration-300 group-hover:shadow-lg">
-                <Image
-                  src={category.image}
-                  alt={`${category.label} RV side profile`}
-                  fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              </div>
-              <span className="mt-3 text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
-                {category.label}
-              </span>
-            </Link>
-          ))}
+        <div className="relative -mx-4 sm:mx-0">
+          <div className="flex gap-4 overflow-x-auto overflow-y-hidden px-2 pb-4 sm:px-2 sm:pb-4 lg:px-3 lg:pb-8 scroll-smooth rv-scrollbar">
+            <div className="shrink-0 w-1" aria-hidden="true" />
+            {rvCategories.map((category) => (
+              <Link
+                key={category.id}
+                href={`/?type=${category.id}`}
+                className="group flex w-[72vw] sm:w-64 lg:w-80 flex-col items-stretch flex-shrink-0"
+              >
+                <div className="w-full h-full rounded-3xl bg-white p-4 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
+                  <div className="relative mx-auto h-32 w-full sm:h-40 lg:h-44 overflow-hidden rounded-3xl">
+                    <Image
+                      src={`/images/${category.id}-image.png`}
+                      alt={`${category.label} RV side profile`}
+                      fill
+                      sizes="(max-width: 640px) 70vw, (max-width: 1024px) 40vw, 24vw"
+                      className="object-contain transition-transform duration-500 ease-out group-hover:scale-110"
+                    />
+                  </div>
+                  <p className="mt-4 text-center text-sm font-semibold text-foreground sm:text-base lg:text-lg">
+                    {category.label}
+                  </p>
+                </div>
+              </Link>
+            ))}
+            <div className="shrink-0 w-1" aria-hidden="true" />
+          </div>
         </div>
       </div>
     </section>

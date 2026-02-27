@@ -66,7 +66,7 @@ function HomeContent() {
                     Simply enter what you want to pay each month, and we'll show you your total budget.
                   </p>
                   <div className="mt-8">
-                    <div className="relative h-64 overflow-hidden rounded-xl lg:h-80">
+                    <div className="relative h-64 overflow-hidden rounded-2xl lg:h-80 lg:rounded-3xl">
                       <Image
                         src="/images/couple-rv.jpg"
                         alt="Couple enjoying their RV"

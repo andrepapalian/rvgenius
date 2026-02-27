@@ -1,10 +1,10 @@
 export const rvCategories = [
-  { id: "class-a", label: "Class A", image: "/images/categories/class-a.jpg" },
-  { id: "class-b", label: "Class B", image: "/images/categories/class-b.jpg" },
-  { id: "class-c", label: "Class C", image: "/images/categories/class-c.jpg" },
   { id: "travel-trailer", label: "Travel Trailers", image: "/images/categories/travel-trailer.jpg" },
   { id: "fifth-wheel", label: "Fifth Wheels", image: "/images/categories/fifth-wheel.jpg" },
   { id: "toy-hauler", label: "Toy Haulers", image: "/images/categories/toy-hauler.jpg" },
+  { id: "class-a", label: "Class A", image: "/images/categories/class-a.jpg" },
+  { id: "class-b", label: "Class B", image: "/images/categories/class-b.jpg" },
+  { id: "class-c", label: "Class C", image: "/images/categories/class-c.jpg" },
 ]
 
 export const testimonials = [

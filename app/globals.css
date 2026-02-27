@@ -128,4 +128,44 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .rv-scrollbar {
+    scrollbar-color: var(--primary) transparent;
+  }
+
+  @media (max-width: 767px) {
+    .rv-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) var(--muted);
+    }
+    .rv-scrollbar::-webkit-scrollbar {
+      height: 6px;
+    }
+    .rv-scrollbar::-webkit-scrollbar-track {
+      background: var(--muted);
+      border-radius: 999px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .rv-scrollbar {
+      scrollbar-width: auto;
+    }
+    .rv-scrollbar::-webkit-scrollbar {
+      height: 12px;
+    }
+    .rv-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+      border-radius: 999px;
+    }
+  }
+
+  .rv-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 999px;
+  }
+
+  .rv-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--accent);
+  }
 }

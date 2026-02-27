@@ -284,18 +284,15 @@ export function SearchResultsSection({
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-48 p-2">
-              <Select value={minYear || "any"} onValueChange={v => setMinYear(v === "any" ? "" : v)}>
-                <SelectTrigger className="w-full border-border bg-muted">
-                  <SelectValue placeholder="Any year" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="any">Any year</SelectItem>
-                  {yearOptions.map(y => (
-                    <SelectItem key={y} value={String(y)}>{y} or newer</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <DropdownMenuContent align="start" className="w-48">
+              <DropdownMenuItem onSelect={() => setMinYear("")}>
+                Any year
+              </DropdownMenuItem>
+              {yearOptions.map(y => (
+                <DropdownMenuItem key={y} onSelect={() => setMinYear(String(y))}>
+                  {y} or newer
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -308,19 +305,22 @@ export function SearchResultsSection({
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48 p-2">
-                <Select value={maxMileage || "any"} onValueChange={v => setMaxMileage(v === "any" ? "" : v)}>
-                  <SelectTrigger className="w-full border-border bg-muted">
-                    <SelectValue placeholder="Any mileage" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Any mileage</SelectItem>
-                    <SelectItem value="5000">Under 5,000 mi</SelectItem>
-                    <SelectItem value="10000">Under 10,000 mi</SelectItem>
-                    <SelectItem value="25000">Under 25,000 mi</SelectItem>
-                    <SelectItem value="50000">Under 50,000 mi</SelectItem>
-                  </SelectContent>
-                </Select>
+              <DropdownMenuContent align="start" className="w-48">
+                <DropdownMenuItem onSelect={() => setMaxMileage("")}>
+                  Any mileage
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setMaxMileage("5000")}>
+                  Under 5,000 mi
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setMaxMileage("10000")}>
+                  Under 10,000 mi
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setMaxMileage("25000")}>
+                  Under 25,000 mi
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setMaxMileage("50000")}>
+                  Under 50,000 mi
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )}
