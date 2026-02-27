@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Search, Star, BarChart3, Shield } from "lucide-react"
 import {
   Select,
@@ -15,16 +16,24 @@ import {
 interface HeroSectionProps {
   selectedType: string
   maxPrice: string
+  location: string
+  radius: string
   onTypeChange: (value: string) => void
   onMaxPriceChange: (value: string) => void
+  onLocationChange: (value: string) => void
+  onRadiusChange: (value: string) => void
   onSearch: () => void
 }
 
 export function HeroSection({
   selectedType,
   maxPrice,
+  location,
+  radius,
   onTypeChange,
   onMaxPriceChange,
+  onLocationChange,
+  onRadiusChange,
   onSearch,
 }: HeroSectionProps) {
   return (
@@ -52,14 +61,17 @@ export function HeroSection({
               </div>
             </div>
             <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:mt-6 lg:text-5xl xl:text-6xl xl:leading-[1.1] [animation-delay:100ms]">
-              Shop the <span className="bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">#1 RV</span> marketplace
+              <span className="block">Buy. Sell.</span>
+              <span className="block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                Go Camping.
+              </span>
             </h1>
             <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 max-w-lg text-lg text-muted-foreground [animation-delay:200ms] sm:mt-5">
               Find your perfect RV or list yours for sale—simple and transparent.
             </p>
             <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 sm:mt-8 [animation-delay:300ms]">
               <div className="relative flex flex-col gap-3 rounded-2xl bg-card/95 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-5">
-                <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="grid grid-cols-2 gap-3">
                   <Select value={selectedType} onValueChange={onTypeChange}>
                     <SelectTrigger className="w-full min-w-0 flex-1 border-border bg-muted sm:w-auto">
                       <SelectValue placeholder="All types" />
@@ -88,6 +100,23 @@ export function HeroSection({
                       <SelectItem value="200000">Under $200,000</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Input
+                    value={location}
+                    onChange={e => onLocationChange(e.target.value)}
+                    placeholder="City, State or ZIP"
+                    className="w-full min-w-0 flex-1 border-border bg-muted"
+                  />
+                  <Select value={radius} onValueChange={onRadiusChange}>
+                    <SelectTrigger className="w-full min-w-0 flex-1 border-border bg-muted sm:w-auto">
+                      <SelectValue placeholder="Within miles" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="25">Within 25 miles</SelectItem>
+                      <SelectItem value="50">Within 50 miles</SelectItem>
+                      <SelectItem value="100">Within 100 miles</SelectItem>
+                      <SelectItem value="250">Within 250 miles</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
                 <Button size="lg" onClick={onSearch} className="w-full gap-2">
                   <Search className="h-4 w-4 shrink-0" />
@@ -100,8 +129,8 @@ export function HeroSection({
                     <BarChart3 className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-foreground">15,000+</p>
-                    <p className="text-xs text-muted-foreground">RVs listed</p>
+                    <p className="text-sm font-semibold text-foreground">Live RV prices</p>
+                    <p className="text-xs text-muted-foreground">Based on real sales</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -110,7 +139,7 @@ export function HeroSection({
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-foreground">Verified</p>
-                    <p className="text-xs text-muted-foreground">Sellers</p>
+                    <p className="text-xs text-muted-foreground">Sellers &amp; Buyers</p>
                   </div>
                 </div>
               </div>
@@ -120,7 +149,7 @@ export function HeroSection({
             </div>
           </div>
           <div className="relative mt-8 lg:mt-0">
-            <div className="relative h-44 w-full overflow-hidden rounded-2xl lg:hidden">
+            <div className="relative h-64 w-full overflow-hidden rounded-2xl lg:hidden">
               <Image src="/images/family-rv.jpg" alt="Happy family with their RV" fill className="object-cover" priority />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             </div>

@@ -20,20 +20,33 @@ function HomeContent() {
   const router = useRouter()
   const [selectedType, setSelectedType] = useState("")
   const [maxPrice, setMaxPrice] = useState("")
+  const [location, setLocation] = useState("")
+  const [radius, setRadius] = useState("")
 
-  const hasSearch = searchParams.get("q") || searchParams.get("type") || searchParams.get("minPrice") || searchParams.get("maxPrice") || searchParams.get("all")
+  const hasSearch =
+    searchParams.get("q") ||
+    searchParams.get("type") ||
+    searchParams.get("minPrice") ||
+    searchParams.get("maxPrice") ||
+    searchParams.get("location") ||
+    searchParams.get("radius") ||
+    searchParams.get("all")
   
   const listings = filterRVs({
     query: searchParams.get("q") || undefined,
     type: searchParams.get("type") || undefined,
     minPrice: searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined,
     maxPrice: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined,
+    location: searchParams.get("location") || undefined,
+    radiusMiles: searchParams.get("radius") ? Number(searchParams.get("radius")) : undefined,
   })
 
   const handleSearch = () => {
     const params = new URLSearchParams()
     if (selectedType && selectedType !== "all") params.set("type", selectedType)
     if (maxPrice && maxPrice !== "any") params.set("maxPrice", maxPrice)
+    if (location.trim()) params.set("location", location.trim())
+    if (radius && radius !== "any") params.set("radius", radius)
     router.push(`/?${params.toString()}`)
   }
 
@@ -46,8 +59,12 @@ function HomeContent() {
           <HeroSection
             selectedType={selectedType}
             maxPrice={maxPrice}
+            location={location}
+            radius={radius}
             onTypeChange={setSelectedType}
             onMaxPriceChange={setMaxPrice}
+            onLocationChange={setLocation}
+            onRadiusChange={setRadius}
             onSearch={handleSearch}
           />
         )}
@@ -100,6 +117,8 @@ function HomeContent() {
             initialType={searchParams.get("type") || ""}
             initialQuery={searchParams.get("q") || ""}
             initialMaxPrice={searchParams.get("maxPrice") || ""}
+            initialLocation={searchParams.get("location") || ""}
+            initialRadius={searchParams.get("radius") || ""}
           />
         )}
       </main>

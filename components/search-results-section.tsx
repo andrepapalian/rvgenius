@@ -32,10 +32,14 @@ export function SearchResultsSection({
   initialType,
   initialQuery,
   initialMaxPrice,
+  initialLocation,
+  initialRadius,
 }: {
   initialType: string
   initialQuery: string
   initialMaxPrice: string
+  initialLocation: string
+  initialRadius: string
 }) {
   const router = useRouter()
   const [searchText, setSearchText] = useState(initialQuery)
@@ -62,6 +66,8 @@ export function SearchResultsSection({
   const [dealOnly, setDealOnly] = useState(false)
   const [sortBy, setSortBy] = useState("newest")
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [location, setLocation] = useState(initialLocation)
+  const [radius, setRadius] = useState(initialRadius)
 
   const applyPriceFilter = useCallback(() => {
     const min = minPrice ? Number(minPrice) : undefined
@@ -88,6 +94,8 @@ export function SearchResultsSection({
     if (showMileageFilter && maxMileage) count++
     if (minSleeps) count++
     if (dealOnly) count++
+    if (location) count++
+    if (radius) count++
     return count
   }, [selectedType, appliedMinPrice, appliedMaxPrice, minYear, maxMileage, minSleeps, dealOnly, showMileageFilter])
 
@@ -102,6 +110,8 @@ export function SearchResultsSection({
     setMinSleeps("")
     setDealOnly(false)
     setSearchText("")
+    setLocation("")
+    setRadius("")
     router.replace("/?all=true", { scroll: false })
   }, [router])
 
@@ -111,13 +121,27 @@ export function SearchResultsSection({
       type: selectedType || undefined,
       minPrice: appliedMinPrice,
       maxPrice: appliedMaxPrice,
+      location: location || undefined,
+      radiusMiles: radius ? Number(radius) : undefined,
       minYear: minYear ? Number(minYear) : undefined,
       maxMileage: showMileageFilter && maxMileage ? Number(maxMileage) : undefined,
       minSleeps: minSleeps ? Number(minSleeps) : undefined,
       dealOnly: dealOnly || undefined,
     }
     return filterRVs(filters)
-  }, [searchText, selectedType, appliedMinPrice, appliedMaxPrice, minYear, maxMileage, minSleeps, dealOnly, showMileageFilter])
+  }, [
+    searchText,
+    selectedType,
+    appliedMinPrice,
+    appliedMaxPrice,
+    location,
+    radius,
+    minYear,
+    maxMileage,
+    minSleeps,
+    dealOnly,
+    showMileageFilter,
+  ])
 
   const sortedListings = useMemo(() => {
     const sorted = [...filteredListings]

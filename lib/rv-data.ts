@@ -34,6 +34,61 @@ export const rvTypes = [
   { value: "toy-hauler", label: "Toy Hauler" },
 ]
 
+type Coordinates = {
+  lat: number
+  lng: number
+}
+
+const CITY_COORDINATES: Record<string, Coordinates> = {
+  "denver, co": { lat: 39.7392, lng: -104.9903 },
+  "austin, tx": { lat: 30.2672, lng: -97.7431 },
+  "phoenix, az": { lat: 33.4484, lng: -112.074 },
+  "nashville, tn": { lat: 36.1627, lng: -86.7816 },
+  "seattle, wa": { lat: 47.6062, lng: -122.3321 },
+  "las vegas, nv": { lat: 36.1699, lng: -115.1398 },
+  "tampa, fl": { lat: 27.9506, lng: -82.4572 },
+  "portland, or": { lat: 45.5152, lng: -122.6784 },
+  "scottsdale, az": { lat: 33.4942, lng: -111.9261 },
+  "charlotte, nc": { lat: 35.2271, lng: -80.8431 },
+  "boulder, co": { lat: 40.01499, lng: -105.27055 },
+  "bend, or": { lat: 44.0582, lng: -121.3153 },
+  "minneapolis, mn": { lat: 44.9778, lng: -93.265 }, 
+  "san antonio, tx": { lat: 29.4252, lng: -98.4946 },
+  "asheville, nc": { lat: 35.5951, lng: -82.5515 },
+  "kansas city, mo": { lat: 39.0997, lng: -94.5786 },
+  "raleigh, nc": { lat: 35.7796, lng: -78.6382 },
+  "dallas, tx": { lat: 32.7767, lng: -96.797 },
+  "boise, id": { lat: 43.615, lng: -116.2023 },
+  "salt lake city, ut": { lat: 40.7608, lng: -111.891 },
+  "moab, ut": { lat: 38.5733, lng: -109.5498 },
+  "tucson, az": { lat: 32.2226, lng: -110.9747 },
+  "orlando, fl": { lat: 28.5383, lng: -81.3792 },
+  "san diego, ca": { lat: 32.7157, lng: -117.1611 },
+}
+
+function normalizeLocationKey(value: string): string {
+  return value.trim().toLowerCase()
+}
+
+function haversineMiles(a: Coordinates, b: Coordinates): number {
+  const toRad = (deg: number) => (deg * Math.PI) / 180
+  const R = 3958.8 // Earth radius in miles
+  const dLat = toRad(b.lat - a.lat)
+  const dLng = toRad(b.lng - a.lng)
+  const lat1 = toRad(a.lat)
+  const lat2 = toRad(b.lat)
+
+  const sinDLat = Math.sin(dLat / 2)
+  const sinDLng = Math.sin(dLng / 2)
+
+  const h =
+    sinDLat * sinDLat +
+    Math.cos(lat1) * Math.cos(lat2) * sinDLng * sinDLng
+
+  const c = 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h))
+  return R * c
+}
+
 export const rvListings: RVListing[] = [
   {
     id: "1",
@@ -547,6 +602,8 @@ export interface SearchFilters {
   type?: string
   minPrice?: number
   maxPrice?: number
+  location?: string
+  radiusMiles?: number
   minYear?: number
   maxYear?: number
   minSleeps?: number
@@ -576,6 +633,25 @@ export function filterRVs(filters: SearchFilters): RVListing[] {
     if (filters.type && filters.type !== "all" && rv.type !== filters.type) return false
     if (filters.minPrice && rv.price < filters.minPrice) return false
     if (filters.maxPrice && rv.price > filters.maxPrice) return false
+    if (filters.location) {
+      const queryKey = normalizeLocationKey(filters.location)
+      const rvKey = normalizeLocationKey(rv.location)
+
+      if (filters.radiusMiles) {
+        const origin = CITY_COORDINATES[queryKey]
+        const dest = CITY_COORDINATES[rvKey]
+
+        if (origin && dest) {
+          const distance = haversineMiles(origin, dest)
+          if (distance > filters.radiusMiles) return false
+        } else {
+          // Fallback to simple text match if we don't have coordinates
+          if (!rvKey.includes(queryKey)) return false
+        }
+      } else {
+        if (!rvKey.includes(queryKey)) return false
+      }
+    }
     if (filters.minYear && rv.year < filters.minYear) return false
     if (filters.maxYear && rv.year > filters.maxYear) return false
     if (filters.minSleeps && rv.sleeps < filters.minSleeps) return false

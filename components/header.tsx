@@ -84,12 +84,14 @@ export function Header() {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 lg:flex">
-          <Button variant="ghost" size="sm" className="gap-2 text-sm font-medium">
-            <User className="h-4 w-4" />
-            Sign In
+          <Button variant="ghost" size="sm" asChild className="gap-2 text-sm font-medium">
+            <Link href="/signin">
+              <User className="h-4 w-4" />
+              <span className="ml-1">Sign In</span>
+            </Link>
           </Button>
           <Button size="sm" asChild>
-            <Link href="/dashboard">Sell Your RV</Link>
+            <Link href="/signup">Sign Up</Link>
           </Button>
         </div>
 
@@ -116,11 +118,11 @@ export function Header() {
               Buy RVs
             </Link>
             <Link
-              href="/dashboard"
+              href="/signup"
               className="block rounded-lg px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Sell Your RV
+              Sign Up
             </Link>
             <Link
               href="#"
@@ -130,11 +132,11 @@ export function Header() {
               Research
             </Link>
             <div className="border-t border-border pt-4">
-              <Button variant="outline" className="mb-2 w-full bg-transparent">
-                Sign In
+              <Button variant="outline" className="mb-2 w-full bg-transparent" asChild>
+                <Link href="/signin">Sign In</Link>
               </Button>
               <Button className="w-full" asChild>
-                <Link href="/dashboard">Sell Your RV</Link>
+                <Link href="/signup">Sign Up</Link>
               </Button>
             </div>
           </div>
