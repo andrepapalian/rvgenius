@@ -630,7 +630,17 @@ export function filterRVs(filters: SearchFilters): RVListing[] {
       const searchable = `${rv.title} ${rv.make} ${rv.model} ${rv.location} ${rv.description} ${rv.typeName} ${rv.features.join(" ")}`.toLowerCase()
       if (!searchable.includes(q)) return false
     }
-    if (filters.type && filters.type !== "all" && rv.type !== filters.type) return false
+    if (filters.type && filters.type !== "all") {
+      if (filters.type === "driveable") {
+        const driveableTypes: RVListing["type"][] = ["class-a", "class-b", "class-c"]
+        if (!driveableTypes.includes(rv.type)) return false
+      } else if (filters.type === "towable") {
+        const towableTypes: RVListing["type"][] = ["travel-trailer", "fifth-wheel", "toy-hauler"]
+        if (!towableTypes.includes(rv.type)) return false
+      } else if (rv.type !== filters.type) {
+        return false
+      }
+    }
     if (filters.minPrice && rv.price < filters.minPrice) return false
     if (filters.maxPrice && rv.price > filters.maxPrice) return false
     if (filters.location) {

@@ -6,9 +6,9 @@ import { rvCategories } from "@/lib/home-data"
 
 export function BrowseByBodyType() {
   return (
-    <section className="bg-card px-4 py-12 sm:px-6 lg:px-8">
+    <section className="bg-muted/50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <h2 className="mb-8 text-center text-xl font-bold text-foreground sm:text-2xl">
+        <h2 className="mb-8 text-left text-xl font-bold text-foreground sm:text-2xl">
           Browse by body type
         </h2>
         <div className="relative -mx-4 sm:mx-0">

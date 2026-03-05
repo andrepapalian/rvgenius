@@ -4,177 +4,234 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Star, BarChart3, Shield } from "lucide-react"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Rows3 } from "lucide-react"
+import { Header } from "@/components/header"
 
 interface HeroSectionProps {
   selectedType: string
-  maxPrice: string
   location: string
-  radius: string
   onTypeChange: (value: string) => void
-  onMaxPriceChange: (value: string) => void
   onLocationChange: (value: string) => void
-  onRadiusChange: (value: string) => void
   onSearch: () => void
 }
 
-export function HeroSection({
+const DriveableIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={className}
+  >
+    <path
+      d="M19.5 7.5v0.429c0 3.335 1.288 4.215 4 5.571v5H21m-1.5 -11h2V7s-1.5 -1 -2 -2.5H0.5v14h2m17 -11h-5v4h6.019M16 18.5a2.5 2.5 0 0 0 5 0m-5 0a2.5 2.5 0 0 1 5 0m-5 0H7.5m-5 0a2.5 2.5 0 0 0 5 0m-5 0a2.5 2.5 0 0 1 5 0m4 -7v-4h-8v4h8Z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+const TowableIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={className}
+  >
+    <path
+      d="M18.5 18.5H24m-5.5 0v-14h-15S0.5 9 0.5 16.616V18.5H7m11.5 0H12m9 2h3m-17 -2a2.5 2.5 0 0 0 5 0m-5 0a2.5 2.5 0 0 1 5 0m-2 -11v4m-6 0a23.99 23.99 0 0 1 1.172 -4H15.5v4H4Z"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+const TYPE_OPTIONS = [
+  {
+    value: "all",
+    label: "All RVs",
+    icon: Rows3,
+  },
+  {
+    value: "driveable",
+    label: "Driveables",
+    icon: DriveableIcon,
+  },
+  {
+    value: "towable",
+    label: "Towables",
+    icon: TowableIcon,
+  },
+] as const
+
+interface HeroTypeTabsRowProps {
+  selectedType: string
+  onTypeChange: (value: string) => void
+  wrapperClassName?: string
+  buttonClassName?: string
+}
+
+function HeroTypeTabsRow({
   selectedType,
-  maxPrice,
-  location,
-  radius,
   onTypeChange,
-  onMaxPriceChange,
-  onLocationChange,
-  onRadiusChange,
-  onSearch,
-}: HeroSectionProps) {
+  wrapperClassName = "",
+  buttonClassName = "",
+}: HeroTypeTabsRowProps) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-primary/10">
-      <div className="absolute -right-[40%] top-0 h-full w-[80%] skew-x-[-12deg] bg-primary/8 lg:-right-[20%] lg:w-[55%]" aria-hidden />
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-        }}
-        aria-hidden
-      />
-      <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16">
-        <div className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-0">
-          <div className="flex flex-col justify-center text-center sm:text-left lg:pr-6 xl:pr-12">
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 flex justify-center sm:justify-start">
-              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-2 text-sm">
-                <div className="flex gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-primary text-primary" />
-                  ))}
-                </div>
-                <span className="font-medium text-foreground">Free to list • No hidden fees</span>
-              </div>
-            </div>
-            <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:mt-6 lg:text-5xl xl:text-6xl xl:leading-[1.1] [animation-delay:100ms]">
-              <span className="block">Buy. Sell.</span>
-              <span className="block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                Go Camping.
-              </span>
-            </h1>
-            <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 max-w-lg text-lg text-muted-foreground [animation-delay:200ms] sm:mt-5">
-              Find your perfect RV or list yours for sale—simple and transparent.
-            </p>
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 sm:mt-8 [animation-delay:300ms]">
-              <div className="relative flex flex-col gap-3 rounded-2xl bg-card/95 px-3 py-4 backdrop-blur-sm sm:px-4 sm:py-5">
-                <div className="grid grid-cols-2 gap-3">
-                  <Select value={selectedType} onValueChange={onTypeChange}>
-                    <SelectTrigger className="w-full min-w-0 flex-1 border-border bg-muted sm:w-auto">
-                      <SelectValue placeholder="All types" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All types</SelectItem>
-                      <SelectItem value="class-a">Class A</SelectItem>
-                      <SelectItem value="class-b">Class B</SelectItem>
-                      <SelectItem value="class-c">Class C</SelectItem>
-                      <SelectItem value="travel-trailer">Travel Trailer</SelectItem>
-                      <SelectItem value="fifth-wheel">Fifth Wheel</SelectItem>
-                      <SelectItem value="toy-hauler">Toy Hauler</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={maxPrice} onValueChange={onMaxPriceChange}>
-                    <SelectTrigger className="w-full min-w-0 flex-1 border-border bg-muted sm:w-auto">
-                      <SelectValue placeholder="Max price" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Any price</SelectItem>
-                      <SelectItem value="25000">Under $25,000</SelectItem>
-                      <SelectItem value="50000">Under $50,000</SelectItem>
-                      <SelectItem value="75000">Under $75,000</SelectItem>
-                      <SelectItem value="100000">Under $100,000</SelectItem>
-                      <SelectItem value="150000">Under $150,000</SelectItem>
-                      <SelectItem value="200000">Under $200,000</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Input
-                    value={location}
-                    onChange={e => onLocationChange(e.target.value)}
-                    placeholder="City, State or ZIP"
-                    className="w-full min-w-0 flex-1 border-border bg-muted"
-                  />
-                  <Select value={radius} onValueChange={onRadiusChange}>
-                    <SelectTrigger className="w-full min-w-0 flex-1 border-border bg-muted sm:w-auto">
-                      <SelectValue placeholder="Within miles" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="25">Within 25 miles</SelectItem>
-                      <SelectItem value="50">Within 50 miles</SelectItem>
-                      <SelectItem value="100">Within 100 miles</SelectItem>
-                      <SelectItem value="250">Within 250 miles</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button size="lg" onClick={onSearch} className="w-full gap-2">
-                  <Search className="h-4 w-4 shrink-0" />
-                  Search RVs
-                </Button>
-              </div>
-              <div className="mt-4 flex flex-wrap justify-center gap-5 sm:mt-6 sm:justify-start sm:gap-8">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
-                    <BarChart3 className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">Live RV prices</p>
-                    <p className="text-xs text-muted-foreground">Based on real sales</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/15">
-                    <Shield className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-foreground">Verified</p>
-                    <p className="text-xs text-muted-foreground">Sellers &amp; Buyers</p>
-                  </div>
-                </div>
-              </div>
-              <p className="mt-5 text-center text-sm text-muted-foreground sm:text-left">
-                Selling an RV? <Link href="/dashboard" className="font-medium text-primary underline-offset-4 hover:underline">List it for free</Link> and reach serious buyers.
-              </p>
+    <div className={wrapperClassName}>
+      {TYPE_OPTIONS.map(option => {
+        const Icon = option.icon
+        const isActive =
+          (!selectedType && option.value === "all") || selectedType === option.value
+
+        return (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => onTypeChange(option.value)}
+            className={`flex flex-1 flex-col items-center justify-center gap-1 px-3 pb-2 pt-1 text-sm font-medium transition-colors sm:text-sm ${
+              isActive
+                ? "text-primary sm:border-b-2 sm:border-primary"
+                : "text-muted-foreground hover:text-foreground sm:border-b-2 sm:border-transparent"
+            } ${buttonClassName}`}
+          >
+            <Icon className={`h-7 w-7 sm:h-7 sm:w-7 ${isActive ? "text-primary" : ""}`} />
+            <span>{option.label}</span>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+export function HeroSection(props: HeroSectionProps) {
+  const { selectedType, location, onTypeChange, onLocationChange, onSearch } = props
+
+  const searchLabel =
+    selectedType === "driveable"
+      ? "Search Driveables"
+      : selectedType === "towable"
+        ? "Search Towables"
+        : "Search RVs"
+
+  return (
+    <section className="relative overflow-hidden bg-white sm:bg-background">
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero-background-image.png"
+          alt="Scenic wooded campsite with RV surrounded by trees"
+          fill
+          className="object-cover"
+          priority
+        />
+      </div>
+      {/* Darken background slightly on mobile for readability */}
+      <div className="absolute inset-0 bg-black/30 sm:bg-transparent" />
+
+      {/* Header inside hero so background flows as one section */}
+      <Header variant="home" />
+
+      <div className="relative mx-auto max-w-7xl px-0 pb-10 pt-6 sm:flex sm:px-6 sm:py-14 lg:px-8 lg:py-20">
+        {/* Mobile layout: no card, full-width content */}
+        <div className="flex w-full flex-col px-4 text-center sm:hidden">
+          {/* Title */}
+          <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 text-4xl font-extrabold tracking-tight text-white [animation-delay:100ms]">
+            <span className="block">
+              Find Your{" "}
+              <span className="inline-block text-white">
+                Perfect
+              </span>{" "}
+              RV.
+            </span>
+          </h1>
+
+          {/* Tabs between title and search controls, same width as input */}
+          <div className="mt-5 w-full">
+            <div className="mx-auto w-full rounded-md bg-white/95 px-1 py-1 shadow-sm">
+              <HeroTypeTabsRow
+                selectedType={selectedType}
+                onTypeChange={onTypeChange}
+                wrapperClassName="flex w-full justify-between gap-0"
+              />
             </div>
           </div>
-          <div className="relative mt-8 lg:mt-0">
-            <div className="relative h-64 w-full overflow-hidden rounded-2xl lg:hidden">
-              <Image src="/images/family-rv.jpg" alt="Happy family with their RV" fill className="object-cover" priority />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 [animation-delay:300ms]">
+            <div className="w-full">
+              <Input
+                value={location}
+                onChange={e => onLocationChange(e.target.value)}
+                placeholder="City, State or ZIP"
+                className="h-14 w-full min-w-0 flex-1 border-border bg-white text-lg"
+              />
+
+              <Button onClick={onSearch} className="mt-4 flex h-14 w-full items-center justify-center text-lg">
+                {searchLabel}
+              </Button>
             </div>
-            <div className="relative hidden lg:block">
-              <div className="relative h-[520px] overflow-hidden rounded-3xl shadow-[0_32px_64px_-12px_rgba(0,0,0,0.25)]">
-                <Image src="/images/family-rv.jpg" alt="Happy family with their RV" fill className="object-cover object-center" priority />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-primary/5" />
-                <div className="absolute bottom-6 left-6 right-6 rounded-xl border border-white/20 bg-card/90 p-4 shadow-xl backdrop-blur-md">
-                  <div className="flex items-center gap-3">
-                    <div className="flex -space-x-2">
-                      <div className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-card">
-                        <Image src="/images/couple-rv.jpg" alt="" fill className="object-cover" />
-                      </div>
-                      <div className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-card">
-                        <Image src="/images/retired-couple-rv.jpg" alt="" fill className="object-cover" />
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">Your next adventure starts here</p>
-                      <span className="text-xs text-muted-foreground">Simple, transparent marketplace</span>
-                    </div>
-                  </div>
+
+            <p className="mt-5 text-center text-sm text-white">
+              Selling an RV?{" "}
+              <Link href="/dashboard" className="font-medium underline underline-offset-4">
+                List it for free
+              </Link>{" "}
+              and reach serious buyers.
+            </p>
+          </div>
+        </div>
+
+        {/* Desktop / tablet layout: card */}
+        <div className="hidden sm:mx-0 sm:flex sm:max-w-2xl sm:flex-col sm:justify-center sm:rounded-3xl sm:bg-white sm:px-6 sm:py-8 sm:text-left sm:shadow-lg">
+          <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-[2.6rem] xl:text-[2.9rem] xl:leading-[1.1] [animation-delay:100ms]">
+            <span className="block">
+              Find Your{" "}
+              <span className="inline-block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                Perfect
+              </span>{" "}
+              RV.
+            </span>
+          </h1>
+
+          <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 max-w-lg text-lg text-muted-foreground [animation-delay:200ms] sm:mt-5">
+            Find your perfect RV or list yours for sale—simple and transparent.
+          </p>
+
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 sm:mt-8 [animation-delay:300ms]">
+            <div className="mx-auto w-full sm:max-w-xl sm:mx-0">
+              <div className="grid grid-cols-1 gap-3">
+                <div className="flex flex-col gap-2">
+                  <HeroTypeTabsRow
+                    selectedType={selectedType}
+                    onTypeChange={onTypeChange}
+                    wrapperClassName="inline-flex w-full justify-between gap-0 border-b border-border/20 sm:border-none"
+                  />
                 </div>
+
+                <Input
+                  value={location}
+                  onChange={e => onLocationChange(e.target.value)}
+                  placeholder="City, State or ZIP"
+                  className="h-12 w-full min-w-0 flex-1 border-border bg-muted text-base"
+                />
               </div>
+
+              <Button onClick={onSearch} className="mt-3 flex h-12 w-full items-center justify-center text-base">
+                {searchLabel}
+              </Button>
             </div>
+
+            <p className="mt-5 text-left text-sm text-muted-foreground">
+              Selling an RV?{" "}
+              <Link href="/dashboard" className="font-medium text-primary underline-offset-4 hover:underline">
+                List it for free
+              </Link>{" "}
+              and reach serious buyers.
+            </p>
           </div>
         </div>
       </div>

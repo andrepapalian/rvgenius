@@ -84,7 +84,9 @@ export function SearchResultsSection({
   }, [])
 
   const MOTORHOME_TYPES = ["class-a", "class-b", "class-c"]
-  const showMileageFilter = !selectedType || MOTORHOME_TYPES.includes(selectedType)
+  const MOTORHOME_GROUPS = ["driveable"]
+  const showMileageFilter =
+    !selectedType || MOTORHOME_TYPES.includes(selectedType) || MOTORHOME_GROUPS.includes(selectedType)
 
   const activeFilterCount = useMemo(() => {
     let count = 0
@@ -170,7 +172,11 @@ export function SearchResultsSection({
           : `Up to $${appliedMaxPrice!.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
       : "Price"
 
-  const bodyTypeLabel = selectedType ? rvTypes.find(t => t.value === selectedType)?.label ?? "Body Type" : "Any type"
+  const groupTypeLabel =
+    selectedType === "driveable" ? "Driveables" : selectedType === "towable" ? "Towables" : undefined
+  const bodyTypeLabel = selectedType
+    ? groupTypeLabel ?? rvTypes.find(t => t.value === selectedType)?.label ?? "Body Type"
+    : "Any type"
   const yearLabel = minYear ? `${minYear}+` : "Year"
   const mileageLabel = maxMileage ? `Under ${Number(maxMileage).toLocaleString()} mi` : "Mileage"
   const sleepsLabel = minSleeps ? `${minSleeps}+ sleeps` : "Sleeps"
@@ -600,7 +606,7 @@ export function SearchResultsSection({
           <div className="mb-4 flex flex-wrap gap-2">
             {selectedType && (
               <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                {rvTypes.find(t => t.value === selectedType)?.label}
+                {groupTypeLabel ?? rvTypes.find(t => t.value === selectedType)?.label ?? "Type"}
                 <button type="button" onClick={() => setSelectedType("")}><X className="h-3 w-3" /></button>
               </span>
             )}

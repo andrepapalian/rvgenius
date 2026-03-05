@@ -3,11 +3,11 @@
 import { Suspense, useState } from "react"
 import Image from "next/image"
 import { useSearchParams, useRouter } from "next/navigation"
+import { ShieldCheck, Eye, Tag } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { HeroSection } from "@/components/hero-section"
 import { BrowseByBodyType } from "@/components/browse-by-body-type"
-import { TestimonialsSection } from "@/components/testimonials-section"
 import { SellCtaSection } from "@/components/sell-cta-section"
 import { WhyChooseUsSection } from "@/components/why-choose-us-section"
 import { FeaturedListingsSection } from "@/components/featured-listings-section"
@@ -19,9 +19,7 @@ function HomeContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [selectedType, setSelectedType] = useState("")
-  const [maxPrice, setMaxPrice] = useState("")
   const [location, setLocation] = useState("")
-  const [radius, setRadius] = useState("")
 
   const hasSearch =
     searchParams.get("q") ||
@@ -44,32 +42,67 @@ function HomeContent() {
   const handleSearch = () => {
     const params = new URLSearchParams()
     if (selectedType && selectedType !== "all") params.set("type", selectedType)
-    if (maxPrice && maxPrice !== "any") params.set("maxPrice", maxPrice)
     if (location.trim()) params.set("location", location.trim())
-    if (radius && radius !== "any") params.set("radius", radius)
     router.push(`/?${params.toString()}`)
   }
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <Header />
-      
+      {hasSearch && <Header />}
+
       <main className="flex-1">
         {!hasSearch && (
           <HeroSection
             selectedType={selectedType}
-            maxPrice={maxPrice}
             location={location}
-            radius={radius}
             onTypeChange={setSelectedType}
-            onMaxPriceChange={setMaxPrice}
             onLocationChange={setLocation}
-            onRadiusChange={setRadius}
             onSearch={handleSearch}
           />
         )}
 
-        {/* Budget Calculator Section */}
+        {!hasSearch && (
+          <section className="border-y border-primary/30 bg-[oklch(0.20_0.01_248.82)]">
+            <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
+              <div className="grid grid-cols-3 gap-3 text-[0.7rem] text-primary-foreground/80 sm:text-xs lg:text-sm">
+                <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-start sm:text-left sm:gap-3">
+                  <ShieldCheck className="mt-0.5 h-6 w-6 shrink-0 text-primary sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
+                  <div className="flex flex-col">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-primary-foreground sm:text-[0.7rem] lg:text-xs">
+                      RV marketplace
+                    </span>
+                    <span className="hidden text-xs text-primary-foreground/80 sm:block">
+                      Built specifically for RV buyers and sellers.
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-start sm:text-left sm:gap-3">
+                  <Eye className="mt-0.5 h-6 w-6 shrink-0 text-primary sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
+                  <div className="flex flex-col">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-primary-foreground sm:text-[0.7rem] lg:text-xs">
+                      No account needed
+                    </span>
+                    <span className="hidden text-xs text-primary-foreground/80 sm:block">
+                      Browse current listings without creating an account.
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-start sm:text-left sm:gap-3">
+                  <Tag className="mt-0.5 h-6 w-6 shrink-0 text-primary sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
+                  <div className="flex flex-col">
+                    <span className="text-xs font-semibold uppercase tracking-wide text-primary-foreground sm:text-[0.7rem] lg:text-xs">
+                      Free RV listings
+                    </span>
+                    <span className="hidden text-xs text-primary-foreground/80 sm:block">
+                      Create and publish your RV listing with no listing fees.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
         {!hasSearch && (
           <section className="relative overflow-hidden bg-white px-4 py-16 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-6xl">
@@ -102,8 +135,6 @@ function HomeContent() {
         )}
 
         {!hasSearch && <BrowseByBodyType />}
-
-        {!hasSearch && <TestimonialsSection />}
 
         {!hasSearch && <SellCtaSection />}
 
