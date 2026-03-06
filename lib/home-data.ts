@@ -73,3 +73,12 @@ export const sleepsOptions = [
   { value: "6", label: "6+" },
   { value: "8", label: "8+" },
 ]
+
+export const distanceOptions = [
+  { value: "", label: "Any distance" },
+  { value: "10", label: "Within 10 mi" },
+  { value: "25", label: "Within 25 mi" },
+  { value: "50", label: "Within 50 mi" },
+  { value: "100", label: "Within 100 mi" },
+  { value: "250", label: "Within 250 mi" },
+]

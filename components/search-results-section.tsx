@@ -4,28 +4,21 @@ import { useState, useMemo, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { ResponsiveSelect } from "@/components/ui/responsive-select"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Search, X, ChevronDown } from "lucide-react"
-import { filterRVs, rvTypes, type SearchFilters } from "@/lib/rv-data"
+import { Search, X, ChevronDown, CheckCircle, MapPin, ArrowUpDown } from "lucide-react"
+import { filterRVs, rvTypes, getLocationDisplayLabel, type SearchFilters } from "@/lib/rv-data"
 import { RVCard } from "@/components/rv-card"
 import {
-  PRICE_PRESETS,
-  MAX_PRICE_PRESETS,
   yearOptions,
   sortOptions,
   sleepsOptions,
+  distanceOptions,
 } from "@/lib/home-data"
 
 export function SearchResultsSection({
@@ -43,7 +36,6 @@ export function SearchResultsSection({
 }) {
   const router = useRouter()
   const [searchText, setSearchText] = useState(initialQuery)
-  const [selectedType, setSelectedType] = useState(initialType)
   const [minPrice, setMinPrice] = useState("")
   const [maxPrice, setMaxPrice] = useState(() => {
     if (initialMaxPrice) {
@@ -52,46 +44,49 @@ export function SearchResultsSection({
     }
     return ""
   })
-  const [appliedMinPrice, setAppliedMinPrice] = useState<number | undefined>(undefined)
-  const [appliedMaxPrice, setAppliedMaxPrice] = useState<number | undefined>(() => {
-    if (initialMaxPrice) {
-      const n = Number(initialMaxPrice)
-      return Number.isFinite(n) && n > 0 ? n : undefined
-    }
-    return undefined
-  })
   const [minYear, setMinYear] = useState("")
   const [maxMileage, setMaxMileage] = useState("")
   const [minSleeps, setMinSleeps] = useState("")
   const [dealOnly, setDealOnly] = useState(false)
   const [sortBy, setSortBy] = useState("newest")
   const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [showLocationModal, setShowLocationModal] = useState(false)
+  const [locationModalZip, setLocationModalZip] = useState("")
   const [location, setLocation] = useState(initialLocation)
   const [radius, setRadius] = useState(initialRadius)
 
-  const applyPriceFilter = useCallback(() => {
-    const min = minPrice ? Number(minPrice) : undefined
-    const max = maxPrice ? Number(maxPrice) : undefined
-    setAppliedMinPrice(min != null && min > 0 && Number.isFinite(min) ? min : undefined)
-    setAppliedMaxPrice(max != null && max > 0 && Number.isFinite(max) ? max : undefined)
-  }, [minPrice, maxPrice])
-
-  const resetPriceFilter = useCallback(() => {
-    setMinPrice("")
-    setMaxPrice("")
-    setAppliedMinPrice(undefined)
-    setAppliedMaxPrice(undefined)
-  }, [])
+  const parsedMinPrice = useMemo(() => {
+    if (!minPrice) return undefined
+    const n = Number(minPrice)
+    return Number.isFinite(n) && n > 0 ? n : undefined
+  }, [minPrice])
+  const parsedMaxPrice = useMemo(() => {
+    if (!maxPrice) return undefined
+    const n = Number(maxPrice)
+    return Number.isFinite(n) && n > 0 ? n : undefined
+  }, [maxPrice])
 
   const MOTORHOME_TYPES = ["class-a", "class-b", "class-c"]
-  const MOTORHOME_GROUPS = ["driveable"]
+  const DRIVEABLE_TYPES = ["class-a", "class-b", "class-c"]
+  const TOWABLE_TYPES = ["travel-trailer", "fifth-wheel", "toy-hauler"]
+
+  function getInitialSelectedTypes(initialType: string): string[] {
+    if (!initialType || initialType === "all") return []
+    if (initialType === "driveable") return [...DRIVEABLE_TYPES]
+    if (initialType === "towable") return [...TOWABLE_TYPES]
+    return [initialType]
+  }
+
+  const [selectedTypes, setSelectedTypes] = useState<string[]>(() =>
+    getInitialSelectedTypes(initialType === "all" ? "" : initialType)
+  )
   const showMileageFilter =
-    !selectedType || MOTORHOME_TYPES.includes(selectedType) || MOTORHOME_GROUPS.includes(selectedType)
+    selectedTypes.length === 0 || selectedTypes.some(t => MOTORHOME_TYPES.includes(t))
 
   const activeFilterCount = useMemo(() => {
     let count = 0
-    if (selectedType) count++
-    if (appliedMinPrice != null || appliedMaxPrice != null) count++
+    if (selectedTypes.length > 0) count++
+    if (parsedMinPrice != null || parsedMaxPrice != null) count++
     if (minYear) count++
     if (showMileageFilter && maxMileage) count++
     if (minSleeps) count++
@@ -99,14 +94,12 @@ export function SearchResultsSection({
     if (location) count++
     if (radius) count++
     return count
-  }, [selectedType, appliedMinPrice, appliedMaxPrice, minYear, maxMileage, minSleeps, dealOnly, showMileageFilter])
+  }, [selectedTypes.length, parsedMinPrice, parsedMaxPrice, minYear, maxMileage, minSleeps, dealOnly, showMileageFilter, location, radius])
 
   const clearAllFilters = useCallback(() => {
-    setSelectedType("")
+    setSelectedTypes([])
     setMinPrice("")
     setMaxPrice("")
-    setAppliedMinPrice(undefined)
-    setAppliedMaxPrice(undefined)
     setMinYear("")
     setMaxMileage("")
     setMinSleeps("")
@@ -120,9 +113,9 @@ export function SearchResultsSection({
   const filteredListings = useMemo(() => {
     const filters: SearchFilters = {
       query: searchText || undefined,
-      type: selectedType || undefined,
-      minPrice: appliedMinPrice,
-      maxPrice: appliedMaxPrice,
+      types: selectedTypes.length > 0 ? selectedTypes : undefined,
+      minPrice: parsedMinPrice,
+      maxPrice: parsedMaxPrice,
       location: location || undefined,
       radiusMiles: radius ? Number(radius) : undefined,
       minYear: minYear ? Number(minYear) : undefined,
@@ -133,9 +126,9 @@ export function SearchResultsSection({
     return filterRVs(filters)
   }, [
     searchText,
-    selectedType,
-    appliedMinPrice,
-    appliedMaxPrice,
+    selectedTypes,
+    parsedMinPrice,
+    parsedMaxPrice,
     location,
     radius,
     minYear,
@@ -164,25 +157,27 @@ export function SearchResultsSection({
   }, [filteredListings, sortBy])
 
   const priceFilterLabel =
-    appliedMinPrice != null || appliedMaxPrice != null
-      ? appliedMinPrice != null && appliedMaxPrice != null
-        ? `$${appliedMinPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })} – $${appliedMaxPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
-        : appliedMinPrice != null
-          ? `From $${appliedMinPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
-          : `Up to $${appliedMaxPrice!.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+    parsedMinPrice != null || parsedMaxPrice != null
+      ? parsedMinPrice != null && parsedMaxPrice != null
+        ? `$${parsedMinPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })} – $${parsedMaxPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+        : parsedMinPrice != null
+          ? `From $${parsedMinPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+          : `Up to $${parsedMaxPrice!.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
       : "Price"
 
-  const groupTypeLabel =
-    selectedType === "driveable" ? "Driveables" : selectedType === "towable" ? "Towables" : undefined
-  const bodyTypeLabel = selectedType
-    ? groupTypeLabel ?? rvTypes.find(t => t.value === selectedType)?.label ?? "Body Type"
-    : "Any type"
+  const bodyTypeLabel =
+    selectedTypes.length === 0
+      ? "Any type"
+      : selectedTypes.length === 1
+        ? (rvTypes.find(t => t.value === selectedTypes[0])?.label ?? "Type")
+        : "Multiple"
   const yearLabel = minYear ? `${minYear}+` : "Year"
+  const distanceLabel = radius ? `Within ${radius} mi` : "Distance"
   const mileageLabel = maxMileage ? `Under ${Number(maxMileage).toLocaleString()} mi` : "Mileage"
   const sleepsLabel = minSleeps ? `${minSleeps}+ sleeps` : "Sleeps"
 
   const filterTriggerClass = (active: boolean) =>
-    `shrink-0 gap-1 border bg-background px-3 py-2 text-sm font-medium transition-colors hover:bg-muted ${active ? "border-primary bg-primary/5 text-primary" : "border-border text-foreground"}`
+    `shrink-0 gap-1 border bg-background px-3 py-2 text-sm font-medium transition-colors hover:bg-muted ${active ? "border-primary bg-primary/5 text-primary hover:text-primary" : "border-border text-foreground hover:text-foreground"}`
 
   return (
     <>
@@ -221,22 +216,35 @@ export function SearchResultsSection({
 
           {/* Desktop: individual filter dropdowns */}
           <div className="hidden flex-wrap items-center gap-2 lg:flex lg:gap-3">
-          {/* Body Type – single dropdown with options (no nested Select) */}
+          {/* Body Type – multi-select dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className={filterTriggerClass(!!selectedType)}>
+              <Button variant="outline" size="sm" className={filterTriggerClass(selectedTypes.length > 0)}>
                 {bodyTypeLabel}
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-48">
-              <DropdownMenuItem onSelect={() => setSelectedType("")}>
+            <DropdownMenuContent align="start" className="w-56 p-2">
+              <DropdownMenuItem onSelect={() => setSelectedTypes([])}>
                 Any type
               </DropdownMenuItem>
               {rvTypes.map(t => (
-                <DropdownMenuItem key={t.value} onSelect={() => setSelectedType(t.value)}>
-                  {t.label}
-                </DropdownMenuItem>
+                <label
+                  key={t.value}
+                  className="flex cursor-pointer items-center gap-3 rounded-md px-3 py-2 text-sm hover:bg-muted"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes(t.value)}
+                    onChange={() => {
+                      setSelectedTypes(prev =>
+                        prev.includes(t.value) ? prev.filter(x => x !== t.value) : [...prev, t.value]
+                      )
+                    }}
+                    className="h-4 w-4 rounded border-border text-primary accent-primary"
+                  />
+                  <span>{t.label}</span>
+                </label>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -244,63 +252,35 @@ export function SearchResultsSection({
           {/* Price */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className={filterTriggerClass(appliedMinPrice != null || appliedMaxPrice != null)}>
+              <Button variant="outline" size="sm" className={filterTriggerClass(parsedMinPrice != null || parsedMaxPrice != null)}>
                 {priceFilterLabel}
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-80 p-4">
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-1 items-center gap-1 rounded-md border border-border bg-muted">
-                    <Input
-                      type="text"
-                      inputMode="numeric"
-                      placeholder="Min"
-                      value={minPrice === "" ? "" : `$${Number(minPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
-                      onChange={e => setMinPrice(e.target.value.replace(/\D/g, ""))}
-                      className="h-8 border-0 bg-transparent shadow-none focus-visible:ring-0 tabular-nums"
-                    />
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button type="button" variant="ghost" size="icon" className="h-7 w-7 shrink-0" aria-label="Min presets">
-                          <ChevronDown className="h-3 w-3" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="min-w-[8rem]">
-                        {PRICE_PRESETS.map(p => (
-                          <DropdownMenuItem key={p.value || "none"} onSelect={() => setMinPrice(p.value)}>{p.label}</DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                  <span className="text-muted-foreground">–</span>
-                  <div className="flex flex-1 items-center gap-1 rounded-md border border-border bg-muted">
-                    <Input
-                      type="text"
-                      inputMode="numeric"
-                      placeholder="Max"
-                      value={maxPrice === "" ? "" : `$${Number(maxPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
-                      onChange={e => setMaxPrice(e.target.value.replace(/\D/g, ""))}
-                      className="h-8 border-0 bg-transparent shadow-none focus-visible:ring-0 tabular-nums"
-                    />
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button type="button" variant="ghost" size="icon" className="h-7 w-7 shrink-0" aria-label="Max presets">
-                          <ChevronDown className="h-3 w-3" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="min-w-[8rem]">
-                        {MAX_PRICE_PRESETS.map(p => (
-                          <DropdownMenuItem key={p.value || "none"} onSelect={() => setMaxPrice(p.value)}>{p.label}</DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+              <div className="flex items-center gap-2">
+                <div className="flex flex-1 items-center gap-1.5 rounded-md border border-border price-range-bg pl-2">
+                  <span className="text-muted-foreground">$</span>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Min"
+                    value={minPrice === "" ? "" : Number(minPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                    onChange={e => setMinPrice(e.target.value.replace(/\D/g, ""))}
+                    className="h-8 border-0 bg-transparent shadow-none focus-visible:ring-0 tabular-nums"
+                  />
                 </div>
-                <div className="flex gap-2">
-                  <Button type="button" size="sm" onClick={applyPriceFilter} className="flex-1">Apply</Button>
-                  <Button type="button" size="sm" variant="outline" onClick={resetPriceFilter} className="flex-1">Reset</Button>
+                <span className="text-muted-foreground">–</span>
+                <div className="flex flex-1 items-center gap-1.5 rounded-md border border-border price-range-bg pl-2">
+                  <span className="text-muted-foreground">$</span>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Max"
+                    value={maxPrice === "" ? "" : Number(maxPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                    onChange={e => setMaxPrice(e.target.value.replace(/\D/g, ""))}
+                    className="h-8 border-0 bg-transparent shadow-none focus-visible:ring-0 tabular-nums"
+                  />
                 </div>
               </div>
             </DropdownMenuContent>
@@ -326,34 +306,25 @@ export function SearchResultsSection({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Mileage – only when motorhome type or any type */}
-          {showMileageFilter && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className={filterTriggerClass(!!maxMileage)}>
-                  {mileageLabel}
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-48">
-                <DropdownMenuItem onSelect={() => setMaxMileage("")}>
-                  Any mileage
+          {/* Distance – radius from location */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className={filterTriggerClass(!!radius)}>
+                {distanceLabel}
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-48">
+              {distanceOptions.map((opt) => (
+                <DropdownMenuItem
+                  key={opt.value || "any"}
+                  onSelect={() => setRadius(opt.value)}
+                >
+                  {opt.label}
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setMaxMileage("5000")}>
-                  Under 5,000 mi
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setMaxMileage("10000")}>
-                  Under 10,000 mi
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setMaxMileage("25000")}>
-                  Under 25,000 mi
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setMaxMileage("50000")}>
-                  Under 50,000 mi
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Sleeps – Zillow-style tab selection */}
           <DropdownMenu>
@@ -370,7 +341,7 @@ export function SearchResultsSection({
                     key={opt.value || "any"}
                     type="button"
                     onClick={() => setMinSleeps(opt.value)}
-                    className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${minSleeps === opt.value ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+                    className={`rounded-md border-2 px-3 py-2 text-sm font-medium transition-colors ${minSleeps === opt.value ? "border-primary bg-primary/10 text-primary" : "border-border bg-white text-muted-foreground hover:bg-muted/80"}`}
                   >
                     {opt.label}
                   </button>
@@ -379,10 +350,10 @@ export function SearchResultsSection({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* More (Deal) */}
+          {/* More (Deal + Mileage) */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className={filterTriggerClass(dealOnly)}>
+              <Button variant="outline" size="sm" className={filterTriggerClass(dealOnly || (showMileageFilter && !!maxMileage))}>
                 More
                 <ChevronDown className="h-4 w-4" />
               </Button>
@@ -397,6 +368,27 @@ export function SearchResultsSection({
                 />
                 <span>Show deals only</span>
               </label>
+              {showMileageFilter && (
+                <>
+                  <div className="my-1 border-t border-border" role="separator" />
+                  <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground">Mileage</div>
+                  <DropdownMenuItem onSelect={() => setMaxMileage("")}>
+                    Any mileage
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => setMaxMileage("5000")}>
+                    Under 5,000 mi
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => setMaxMileage("10000")}>
+                    Under 10,000 mi
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => setMaxMileage("25000")}>
+                    Under 25,000 mi
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => setMaxMileage("50000")}>
+                    Under 50,000 mi
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
 
@@ -431,57 +423,29 @@ export function SearchResultsSection({
               {/* Price Range */}
               <section>
                 <h3 className="mb-3 text-sm font-semibold text-foreground">Price Range</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <div className="flex flex-1 items-center gap-1 rounded-md border border-border bg-muted">
-                      <Input
-                        type="text"
-                        inputMode="numeric"
-                        placeholder="Min"
-                        value={minPrice === "" ? "" : `$${Number(minPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
-                        onChange={e => setMinPrice(e.target.value.replace(/\D/g, ""))}
-                        className="h-10 border-0 bg-transparent shadow-none focus-visible:ring-0 tabular-nums"
-                      />
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0" aria-label="Min presets">
-                            <ChevronDown className="h-3 w-3" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="min-w-[8rem]">
-                          {PRICE_PRESETS.map(p => (
-                            <DropdownMenuItem key={p.value || "none"} onSelect={() => setMinPrice(p.value)}>{p.label}</DropdownMenuItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                    <span className="text-muted-foreground">–</span>
-                    <div className="flex flex-1 items-center gap-1 rounded-md border border-border bg-muted">
-                      <Input
-                        type="text"
-                        inputMode="numeric"
-                        placeholder="Max"
-                        value={maxPrice === "" ? "" : `$${Number(maxPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
-                        onChange={e => setMaxPrice(e.target.value.replace(/\D/g, ""))}
-                        className="h-10 border-0 bg-transparent shadow-none focus-visible:ring-0 tabular-nums"
-                      />
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button type="button" variant="ghost" size="icon" className="h-8 w-8 shrink-0" aria-label="Max presets">
-                            <ChevronDown className="h-3 w-3" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="min-w-[8rem]">
-                          {MAX_PRICE_PRESETS.map(p => (
-                            <DropdownMenuItem key={p.value || "none"} onSelect={() => setMaxPrice(p.value)}>{p.label}</DropdownMenuItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex flex-1 items-center gap-1.5 rounded-md border border-border price-range-bg pl-3">
+                    <span className="text-muted-foreground">$</span>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="Min"
+                      value={minPrice === "" ? "" : Number(minPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                      onChange={e => setMinPrice(e.target.value.replace(/\D/g, ""))}
+                      className="h-10 border-0 bg-transparent shadow-none focus-visible:ring-0 tabular-nums"
+                    />
                   </div>
-                  <div className="flex gap-2">
-                    <Button type="button" size="sm" onClick={applyPriceFilter} className="flex-1">Apply</Button>
-                    <Button type="button" size="sm" variant="outline" onClick={resetPriceFilter} className="flex-1">Reset</Button>
+                  <span className="text-muted-foreground">–</span>
+                  <div className="flex flex-1 items-center gap-1.5 rounded-md border border-border price-range-bg pl-3">
+                    <span className="text-muted-foreground">$</span>
+                    <Input
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="Max"
+                      value={maxPrice === "" ? "" : Number(maxPrice).toLocaleString("en-US", { maximumFractionDigits: 0 })}
+                      onChange={e => setMaxPrice(e.target.value.replace(/\D/g, ""))}
+                      className="h-10 border-0 bg-transparent shadow-none focus-visible:ring-0 tabular-nums"
+                    />
                   </div>
                 </div>
               </section>
@@ -489,51 +453,75 @@ export function SearchResultsSection({
               {/* Body Type */}
               <section>
                 <h3 className="mb-3 text-sm font-semibold text-foreground">Body Type</h3>
-                <Select value={selectedType || "any"} onValueChange={v => setSelectedType(v === "any" ? "" : v)}>
-                  <SelectTrigger className="w-full border-border bg-muted">
-                    <SelectValue placeholder="Any type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Any type</SelectItem>
+                <div className="space-y-1">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      selectedTypes.length === rvTypes.length
+                        ? setSelectedTypes([])
+                        : setSelectedTypes(rvTypes.map(t => t.value))
+                    }
+                    className="flex items-center gap-2 text-sm text-primary hover:underline"
+                  >
+                    <CheckCircle className="h-4 w-4 shrink-0 text-black" />
+                    {selectedTypes.length === rvTypes.length ? "Deselect All" : "Select All"}
+                  </button>
+                  <div className="my-2 border-b border-border" role="presentation" />
+                  <div className="flex flex-col gap-0.5">
                     {rvTypes.map(t => (
-                      <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
+                      <label
+                        key={t.value}
+                        className="flex cursor-pointer items-center gap-3 rounded-md px-2 py-1.5 text-[0.95rem] hover:bg-muted"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedTypes.includes(t.value)}
+                          onChange={() => {
+                            setSelectedTypes(prev =>
+                              prev.includes(t.value) ? prev.filter(x => x !== t.value) : [...prev, t.value]
+                            )
+                          }}
+                          className="h-5 w-5 rounded border-border text-primary accent-primary"
+                        />
+                        <span className="truncate">{t.label}</span>
+                      </label>
                     ))}
-                  </SelectContent>
-                </Select>
+                  </div>
+                </div>
               </section>
 
-              {/* Year */}
+              {/* Year – native select for system picker on mobile */}
               <section>
                 <h3 className="mb-3 text-sm font-semibold text-foreground">Year</h3>
-                <Select value={minYear || "any"} onValueChange={v => setMinYear(v === "any" ? "" : v)}>
-                  <SelectTrigger className="w-full border-border bg-muted">
-                    <SelectValue placeholder="Any year" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Any year</SelectItem>
-                    {yearOptions.map(y => (
-                      <SelectItem key={y} value={String(y)}>{y} or newer</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <select
+                  value={minYear || "any"}
+                  onChange={e => setMinYear(e.target.value === "any" ? "" : e.target.value)}
+                  className="w-full rounded-md border border-border bg-muted px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  aria-label="Minimum year"
+                >
+                  <option value="any">Any year</option>
+                  {yearOptions.map(y => (
+                    <option key={y} value={String(y)}>{y} or newer</option>
+                  ))}
+                </select>
               </section>
 
-              {/* Mileage – only when motorhome type or any type */}
+              {/* Mileage – native select for system picker on mobile */}
               {showMileageFilter && (
                 <section>
                   <h3 className="mb-3 text-sm font-semibold text-foreground">Mileage</h3>
-                  <Select value={maxMileage || "any"} onValueChange={v => setMaxMileage(v === "any" ? "" : v)}>
-                    <SelectTrigger className="w-full border-border bg-muted">
-                      <SelectValue placeholder="Any mileage" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Any mileage</SelectItem>
-                      <SelectItem value="5000">Under 5,000 mi</SelectItem>
-                      <SelectItem value="10000">Under 10,000 mi</SelectItem>
-                      <SelectItem value="25000">Under 25,000 mi</SelectItem>
-                      <SelectItem value="50000">Under 50,000 mi</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <select
+                    value={maxMileage || "any"}
+                    onChange={e => setMaxMileage(e.target.value === "any" ? "" : e.target.value)}
+                    className="w-full rounded-md border border-border bg-muted px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                    aria-label="Maximum mileage"
+                  >
+                    <option value="any">Any mileage</option>
+                    <option value="5000">Under 5,000 mi</option>
+                    <option value="10000">Under 10,000 mi</option>
+                    <option value="25000">Under 25,000 mi</option>
+                    <option value="50000">Under 50,000 mi</option>
+                  </select>
                 </section>
               )}
 
@@ -546,7 +534,7 @@ export function SearchResultsSection({
                       key={opt.value || "any"}
                       type="button"
                       onClick={() => setMinSleeps(opt.value)}
-                      className={`min-h-[2.75rem] rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${minSleeps === opt.value ? "bg-primary text-primary-foreground" : "border border-border bg-muted/80 text-muted-foreground hover:bg-muted"}`}
+                      className={`min-h-[2.75rem] rounded-lg border-2 px-4 py-2 text-sm font-semibold transition-colors ${minSleeps === opt.value ? "border-primary bg-primary/10 text-primary" : "border-border bg-white text-muted-foreground hover:bg-muted"}`}
                     >
                       {opt.label}
                     </button>
@@ -582,42 +570,75 @@ export function SearchResultsSection({
 
       {/* Results content – full width, no sidebar */}
       <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <h1 className="text-2xl font-bold text-foreground">Search Results</h1>
-          <div className="flex items-center gap-3">
-            <p className="text-sm text-muted-foreground">
-              {sortedListings.length} {sortedListings.length === 1 ? "RV" : "RVs"} found
+        <div className="mb-4 flex flex-row flex-wrap items-center justify-between gap-2">
+          <div className="flex min-w-0 flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <p className="text-base font-normal text-foreground">
+              {sortedListings.length} {sortedListings.length === 1 ? "result" : "results"}
             </p>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="h-9 w-[10rem] border-border bg-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {sortOptions.map(o => (
-                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <span className="hidden h-4 w-px shrink-0 bg-border sm:inline-block" aria-hidden />
+            <button
+              type="button"
+              onClick={() => {
+                setLocationModalZip(location.replace(/\D/g, "").slice(0, 5))
+                setShowLocationModal(true)
+              }}
+              className="inline-flex min-w-0 cursor-pointer items-center gap-1.5 text-base font-normal text-foreground underline hover:text-primary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded"
+              aria-label="Change location"
+            >
+              <MapPin className="h-4 w-4 shrink-0" />
+              <span className="truncate">{location ? getLocationDisplayLabel(location) : "Set location"}</span>
+            </button>
+          </div>
+          <div className="flex shrink-0 items-center gap-3">
+            <ResponsiveSelect
+              value={sortBy}
+              onValueChange={setSortBy}
+              options={sortOptions}
+              triggerClassName="h-9 w-[10rem] border-border bg-white"
+              selectClassName="h-9 w-[10rem] border-border bg-white"
+              triggerIcon={<ArrowUpDown className="h-4 w-4 shrink-0" />}
+              ariaLabel="Sort results"
+            />
           </div>
         </div>
 
         {/* Active filter pills */}
         {activeFilterCount > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
-            {selectedType && (
+            {selectedTypes.map(typeValue => {
+              const label = rvTypes.find(t => t.value === typeValue)?.label ?? "Type"
+              return (
+                <span
+                  key={typeValue}
+                  className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                >
+                  {label}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSelectedTypes(prev => prev.filter(t => t !== typeValue))
+                    }
+                    aria-label={`Clear ${label}`}
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              )
+            })}
+            {(parsedMinPrice != null || parsedMaxPrice != null) && (
               <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                {groupTypeLabel ?? rvTypes.find(t => t.value === selectedType)?.label ?? "Type"}
-                <button type="button" onClick={() => setSelectedType("")}><X className="h-3 w-3" /></button>
+                {parsedMinPrice != null && parsedMaxPrice != null
+                  ? `$${parsedMinPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })} – $${parsedMaxPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+                  : parsedMinPrice != null
+                    ? `From $${parsedMinPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
+                    : `Up to $${parsedMaxPrice!.toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
+                <button type="button" onClick={() => { setMinPrice(""); setMaxPrice(""); }} aria-label="Clear price"><X className="h-3 w-3" /></button>
               </span>
             )}
-            {(appliedMinPrice != null || appliedMaxPrice != null) && (
+            {radius && (
               <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                {appliedMinPrice != null && appliedMaxPrice != null
-                  ? `$${appliedMinPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })} – $${appliedMaxPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
-                  : appliedMinPrice != null
-                    ? `From $${appliedMinPrice.toLocaleString("en-US", { maximumFractionDigits: 0 })}`
-                    : `Up to $${appliedMaxPrice!.toLocaleString("en-US", { maximumFractionDigits: 0 })}`}
-                <button type="button" onClick={() => { setMinPrice(""); setMaxPrice(""); setAppliedMinPrice(undefined); setAppliedMaxPrice(undefined); }} aria-label="Clear price"><X className="h-3 w-3" /></button>
+                Within {radius} mi
+                <button type="button" onClick={() => setRadius("")} aria-label="Clear distance"><X className="h-3 w-3" /></button>
               </span>
             )}
             {minYear && (
@@ -661,6 +682,54 @@ export function SearchResultsSection({
           </div>
         )}
       </section>
+
+      {/* Location (ZIP) modal */}
+      {showLocationModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="location-modal-title"
+        >
+          <div
+            className="absolute inset-0 bg-black/50"
+            aria-hidden
+            onClick={() => setShowLocationModal(false)}
+          />
+          <div className="relative w-full max-w-sm rounded-lg border border-border bg-card p-6 shadow-lg">
+            <h2 id="location-modal-title" className="text-lg font-semibold text-foreground">
+              Change location
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Enter a ZIP code. This is used for the distance filter.
+            </p>
+            <Input
+              type="text"
+              inputMode="numeric"
+              placeholder="ZIP code"
+              maxLength={5}
+              value={locationModalZip}
+              onChange={e => setLocationModalZip(e.target.value.replace(/\D/g, "").slice(0, 5))}
+              className="mt-4 h-10 w-full border-border bg-background px-3 text-sm tabular-nums"
+              aria-label="ZIP code"
+            />
+            <div className="mt-6 flex gap-3 justify-end">
+              <Button variant="outline" onClick={() => setShowLocationModal(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  const zip = locationModalZip.trim()
+                  setLocation(zip)
+                  setShowLocationModal(false)
+                }}
+              >
+                Update
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

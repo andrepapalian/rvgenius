@@ -20,8 +20,8 @@ export function BrowseByBodyType() {
                 href={`/?type=${category.id}`}
                 className="group flex w-[72vw] sm:w-64 lg:w-80 flex-col items-stretch flex-shrink-0"
               >
-                <div className="w-full h-full rounded-3xl bg-white p-4 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
-                  <div className="relative mx-auto h-32 w-full sm:h-40 lg:h-44 overflow-hidden rounded-3xl">
+                <div className="w-full h-full rounded-2xl bg-white p-4 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
+                  <div className="relative mx-auto h-32 w-full sm:h-40 lg:h-44 overflow-hidden rounded-2xl">
                     <Image
                       src={`/images/${category.id}-image.png`}
                       alt={`${category.label} RV side profile`}

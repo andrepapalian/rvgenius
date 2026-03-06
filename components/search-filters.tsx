@@ -4,15 +4,14 @@ import { useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { ResponsiveSelect } from "@/components/ui/responsive-select"
 import { Search, X } from "lucide-react"
 import { rvTypes } from "@/lib/rv-data"
+
+const typeOptions = [
+  { value: "all", label: "All Types" },
+  ...rvTypes.map((t) => ({ value: t.value, label: t.label })),
+]
 
 export function SearchFilters() {
   const router = useRouter()
@@ -59,19 +58,14 @@ export function SearchFilters() {
         </div>
         
         {/* Type Select */}
-        <Select value={type} onValueChange={setType}>
-          <SelectTrigger className="w-full bg-background lg:w-44">
-            <SelectValue placeholder="All Types" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            {rvTypes.map((rvType) => (
-              <SelectItem key={rvType.value} value={rvType.value}>
-                {rvType.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ResponsiveSelect
+          value={type}
+          onValueChange={setType}
+          options={typeOptions}
+          placeholder="All Types"
+          triggerClassName="w-full bg-background lg:w-44"
+          ariaLabel="RV type"
+        />
 
         {/* Price Range */}
         <div className="flex items-center gap-2">

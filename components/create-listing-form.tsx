@@ -5,21 +5,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { ResponsiveSelect } from "@/components/ui/responsive-select"
 import { rvTypes } from "@/lib/rv-data"
 import { Check, Loader2, ImagePlus, ArrowRight, ArrowLeft } from "lucide-react"
 import Link from "next/link"
+
+const rvTypeOptions = rvTypes.map((t) => ({ value: t.value, label: t.label }))
 
 export function CreateListingForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [step, setStep] = useState(1)
+  const [type, setType] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -95,18 +92,17 @@ export function CreateListingForm() {
             
             <div>
               <Label htmlFor="type">RV Type</Label>
-              <Select required>
-                <SelectTrigger id="type" className="mt-1.5">
-                  <SelectValue placeholder="Select type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {rvTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <ResponsiveSelect
+                id="type"
+                value={type}
+                onValueChange={setType}
+                options={rvTypeOptions}
+                placeholder="Select type"
+                triggerClassName="mt-1.5"
+                selectClassName="mt-1.5"
+                ariaLabel="RV type"
+                required
+              />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">

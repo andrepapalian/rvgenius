@@ -52,7 +52,7 @@ const CITY_COORDINATES: Record<string, Coordinates> = {
   "charlotte, nc": { lat: 35.2271, lng: -80.8431 },
   "boulder, co": { lat: 40.01499, lng: -105.27055 },
   "bend, or": { lat: 44.0582, lng: -121.3153 },
-  "minneapolis, mn": { lat: 44.9778, lng: -93.265 }, 
+  "minneapolis, mn": { lat: 44.9778, lng: -93.265 },
   "san antonio, tx": { lat: 29.4252, lng: -98.4946 },
   "asheville, nc": { lat: 35.5951, lng: -82.5515 },
   "kansas city, mo": { lat: 39.0997, lng: -94.5786 },
@@ -66,8 +66,81 @@ const CITY_COORDINATES: Record<string, Coordinates> = {
   "san diego, ca": { lat: 32.7157, lng: -117.1611 },
 }
 
+/** ZIP code (5-digit) to coordinates for distance filtering. Same cities as CITY_COORDINATES. */
+const ZIP_COORDINATES: Record<string, Coordinates> = {
+  "80202": { lat: 39.7392, lng: -104.9903 },
+  "78701": { lat: 30.2672, lng: -97.7431 },
+  "85001": { lat: 33.4484, lng: -112.074 },
+  "37201": { lat: 36.1627, lng: -86.7816 },
+  "98101": { lat: 47.6062, lng: -122.3321 },
+  "89101": { lat: 36.1699, lng: -115.1398 },
+  "33602": { lat: 27.9506, lng: -82.4572 },
+  "97201": { lat: 45.5152, lng: -122.6784 },
+  "28202": { lat: 35.2271, lng: -80.8431 },
+  "80301": { lat: 40.01499, lng: -105.27055 },
+  "97701": { lat: 44.0582, lng: -121.3153 },
+  "55401": { lat: 44.9778, lng: -93.265 },
+  "78201": { lat: 29.4252, lng: -98.4946 },
+  "28801": { lat: 35.5951, lng: -82.5515 },
+  "64101": { lat: 39.0997, lng: -94.5786 },
+  "27601": { lat: 35.7796, lng: -78.6382 },
+  "75201": { lat: 32.7767, lng: -96.797 },
+  "83701": { lat: 43.615, lng: -116.2023 },
+  "84101": { lat: 40.7608, lng: -111.891 },
+  "84532": { lat: 38.5733, lng: -109.5498 },
+  "85701": { lat: 32.2226, lng: -110.9747 },
+  "32801": { lat: 28.5383, lng: -81.3792 },
+  "92101": { lat: 32.7157, lng: -117.1611 },
+}
+
+/** ZIP code to "City, State" for display. */
+export const ZIP_LABELS: Record<string, string> = {
+  "80202": "Denver, CO",
+  "78701": "Austin, TX",
+  "85001": "Phoenix, AZ",
+  "37201": "Nashville, TN",
+  "98101": "Seattle, WA",
+  "89101": "Las Vegas, NV",
+  "33602": "Tampa, FL",
+  "97201": "Portland, OR",
+  "28202": "Charlotte, NC",
+  "80301": "Boulder, CO",
+  "97701": "Bend, OR",
+  "55401": "Minneapolis, MN",
+  "78201": "San Antonio, TX",
+  "28801": "Asheville, NC",
+  "64101": "Kansas City, MO",
+  "27601": "Raleigh, NC",
+  "75201": "Dallas, TX",
+  "83701": "Boise, ID",
+  "84101": "Salt Lake City, UT",
+  "84532": "Moab, UT",
+  "85701": "Tucson, AZ",
+  "32801": "Orlando, FL",
+  "92101": "San Diego, CA",
+}
+
+/** Returns a display label for location (ZIP → "City, State", or title-cased city, state). */
+export function getLocationDisplayLabel(location: string): string {
+  const trimmed = location.trim()
+  if (!trimmed) return ""
+  const zipOnly = trimmed.replace(/\D/g, "")
+  if (zipOnly.length === 5 && ZIP_LABELS[zipOnly]) return ZIP_LABELS[zipOnly]
+  if (zipOnly.length === 5) return trimmed
+  return trimmed.replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 function normalizeLocationKey(value: string): string {
   return value.trim().toLowerCase()
+}
+
+function getOriginCoordinates(location: string): Coordinates | undefined {
+  const trimmed = location.trim()
+  const zipOnly = trimmed.replace(/\D/g, "")
+  if (zipOnly.length === 5) {
+    return ZIP_COORDINATES[zipOnly]
+  }
+  return CITY_COORDINATES[normalizeLocationKey(trimmed)]
 }
 
 function haversineMiles(a: Coordinates, b: Coordinates): number {
@@ -600,6 +673,8 @@ export function getFeaturedRVs(): RVListing[] {
 export interface SearchFilters {
   query?: string
   type?: string
+  /** When set, filter by RV type being in this list (overrides type for body-type filtering). */
+  types?: string[]
   minPrice?: number
   maxPrice?: number
   location?: string
@@ -630,7 +705,9 @@ export function filterRVs(filters: SearchFilters): RVListing[] {
       const searchable = `${rv.title} ${rv.make} ${rv.model} ${rv.location} ${rv.description} ${rv.typeName} ${rv.features.join(" ")}`.toLowerCase()
       if (!searchable.includes(q)) return false
     }
-    if (filters.type && filters.type !== "all") {
+    if (filters.types && filters.types.length > 0) {
+      if (!filters.types.includes(rv.type)) return false
+    } else if (filters.type && filters.type !== "all") {
       if (filters.type === "driveable") {
         const driveableTypes: RVListing["type"][] = ["class-a", "class-b", "class-c"]
         if (!driveableTypes.includes(rv.type)) return false
@@ -648,7 +725,7 @@ export function filterRVs(filters: SearchFilters): RVListing[] {
       const rvKey = normalizeLocationKey(rv.location)
 
       if (filters.radiusMiles) {
-        const origin = CITY_COORDINATES[queryKey]
+        const origin = getOriginCoordinates(filters.location)
         const dest = CITY_COORDINATES[rvKey]
 
         if (origin && dest) {

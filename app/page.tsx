@@ -1,8 +1,9 @@
 "use client"
 
-import { Suspense, useState } from "react"
-import Image from "next/image"
+import { Suspense, useState, useMemo } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import { ShieldCheck, Eye, Tag } from "lucide-react"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
@@ -12,7 +13,13 @@ import { SellCtaSection } from "@/components/sell-cta-section"
 import { WhyChooseUsSection } from "@/components/why-choose-us-section"
 import { FeaturedListingsSection } from "@/components/featured-listings-section"
 import { SearchResultsSection } from "@/components/search-results-section"
-import { BudgetCalculator } from "@/components/budget-calculator"
+import {
+  BudgetCalculator,
+  computeTotalBudget,
+  formatBudgetCurrency,
+  BUDGET_CALCULATOR_INTEREST_RATE,
+} from "@/components/budget-calculator"
+import { Button } from "@/components/ui/button"
 import { filterRVs } from "@/lib/rv-data"
 
 function HomeContent() {
@@ -20,6 +27,14 @@ function HomeContent() {
   const router = useRouter()
   const [selectedType, setSelectedType] = useState("")
   const [location, setLocation] = useState("")
+  const [monthlyPayment, setMonthlyPayment] = useState(500)
+  const [downPayment, setDownPayment] = useState(5000)
+  const [loanTerm, setLoanTerm] = useState(120)
+
+  const totalBudget = useMemo(
+    () => computeTotalBudget(monthlyPayment, downPayment, loanTerm),
+    [monthlyPayment, downPayment, loanTerm]
+  )
 
   const hasSearch =
     searchParams.get("q") ||
@@ -66,7 +81,7 @@ function HomeContent() {
             <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
               <div className="grid grid-cols-3 gap-3 text-[0.7rem] text-primary-foreground/80 sm:text-xs lg:text-sm">
                 <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-start sm:text-left sm:gap-3">
-                  <ShieldCheck className="mt-0.5 h-6 w-6 shrink-0 text-primary sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
+                  <ShieldCheck className="mt-0.5 h-6 w-6 shrink-0 text-green-500 sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
                   <div className="flex flex-col">
                     <span className="text-xs font-semibold uppercase tracking-wide text-primary-foreground sm:text-[0.7rem] lg:text-xs">
                       RV marketplace
@@ -77,7 +92,7 @@ function HomeContent() {
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-start sm:text-left sm:gap-3">
-                  <Eye className="mt-0.5 h-6 w-6 shrink-0 text-primary sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
+                  <Eye className="mt-0.5 h-6 w-6 shrink-0 text-green-500 sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
                   <div className="flex flex-col">
                     <span className="text-xs font-semibold uppercase tracking-wide text-primary-foreground sm:text-[0.7rem] lg:text-xs">
                       No account needed
@@ -88,7 +103,7 @@ function HomeContent() {
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-1 text-center sm:flex-row sm:items-start sm:text-left sm:gap-3">
-                  <Tag className="mt-0.5 h-6 w-6 shrink-0 text-primary sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
+                  <Tag className="mt-0.5 h-6 w-6 shrink-0 text-green-500 sm:h-6 sm:w-6 lg:h-7 lg:w-7" />
                   <div className="flex flex-col">
                     <span className="text-xs font-semibold uppercase tracking-wide text-primary-foreground sm:text-[0.7rem] lg:text-xs">
                       Free RV listings
@@ -108,26 +123,40 @@ function HomeContent() {
             <div className="mx-auto max-w-6xl">
               <div className="grid gap-8 lg:grid-cols-2 lg:gap-12 lg:items-center">
                 <div className="flex flex-col justify-center">
-                  <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
+                  <div className="rounded-xl border border-border bg-muted/30 px-4 py-5 text-center sm:px-6 sm:py-6">
+                    <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
+                      Up to
+                    </p>
+                    <p className="mt-1 text-4xl font-bold tabular-nums tracking-tight text-foreground sm:text-5xl">
+                      {formatBudgetCurrency(totalBudget)}
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      {BUDGET_CALCULATOR_INTEREST_RATE}% · {loanTerm} mo
+                    </p>
+                  </div>
+                  <h2 className="mt-5 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                     What can I afford?
                   </h2>
-                  <p className="mt-3 text-muted-foreground">
-                    Use our budget calculator to find RVs that fit your monthly payment.
-                    Simply enter what you want to pay each month, and we'll show you your total budget.
+                  <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+                    Set your monthly payment and down payment—we’ll show your max budget so you can shop to it.
                   </p>
-                  <div className="mt-8">
-                    <div className="relative h-64 overflow-hidden rounded-2xl lg:h-80 lg:rounded-3xl">
-                      <Image
-                        src="/images/couple-rv.jpg"
-                        alt="Couple enjoying their RV"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  </div>
+                  <Button className="mt-6 w-full gap-2" size="lg" asChild>
+                    <Link href={`/?maxPrice=${totalBudget}`}>
+                      Shop RVs in my budget
+                      <ArrowRight className="h-5 w-5" aria-hidden />
+                    </Link>
+                  </Button>
                 </div>
                 <div>
-                  <BudgetCalculator />
+                  <BudgetCalculator
+                    monthlyPayment={monthlyPayment}
+                    setMonthlyPayment={setMonthlyPayment}
+                    downPayment={downPayment}
+                    setDownPayment={setDownPayment}
+                    loanTerm={loanTerm}
+                    setLoanTerm={setLoanTerm}
+                    hideResultAndCta
+                  />
                 </div>
               </div>
             </div>
@@ -144,13 +173,15 @@ function HomeContent() {
 
         {/* Search Results */}
         {hasSearch && (
-          <SearchResultsSection
-            initialType={searchParams.get("type") || ""}
-            initialQuery={searchParams.get("q") || ""}
-            initialMaxPrice={searchParams.get("maxPrice") || ""}
-            initialLocation={searchParams.get("location") || ""}
-            initialRadius={searchParams.get("radius") || ""}
-          />
+          <div className="min-h-full bg-white">
+            <SearchResultsSection
+              initialType={searchParams.get("type") || ""}
+              initialQuery={searchParams.get("q") || ""}
+              initialMaxPrice={searchParams.get("maxPrice") || ""}
+              initialLocation={searchParams.get("location") || ""}
+              initialRadius={searchParams.get("radius") || ""}
+            />
+          </div>
         )}
       </main>
 

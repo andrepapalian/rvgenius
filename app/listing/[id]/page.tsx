@@ -74,7 +74,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
         <div className="bg-card">
           <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 lg:px-8">
             <Link
-              href="/"
+              href="/?all=1"
               className="inline-flex items-center text-sm text-primary hover:underline"
             >
               <ArrowLeft className="mr-1 h-4 w-4" />

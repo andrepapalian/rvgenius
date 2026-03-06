@@ -94,10 +94,10 @@ function HeroTypeTabsRow({
             key={option.value}
             type="button"
             onClick={() => onTypeChange(option.value)}
-            className={`flex flex-1 flex-col items-center justify-center gap-1 px-3 pb-2 pt-1 text-sm font-medium transition-colors sm:text-sm ${
+            className={`flex flex-1 flex-col items-center justify-center gap-1 border-b-2 px-3 pb-2 pt-1 text-sm font-medium transition-colors sm:text-sm ${
               isActive
-                ? "text-primary sm:border-b-2 sm:border-primary"
-                : "text-muted-foreground hover:text-foreground sm:border-b-2 sm:border-transparent"
+                ? "border-primary text-primary"
+                : "border-transparent text-muted-foreground hover:text-foreground"
             } ${buttonClassName}`}
           >
             <Icon className={`h-7 w-7 sm:h-7 sm:w-7 ${isActive ? "text-primary" : ""}`} />
@@ -150,32 +150,32 @@ export function HeroSection(props: HeroSectionProps) {
             </span>
           </h1>
 
-          {/* Tabs between title and search controls, same width as input */}
-          <div className="mt-5 w-full">
-            <div className="mx-auto w-full rounded-md bg-white/95 px-1 py-1 shadow-sm">
-              <HeroTypeTabsRow
-                selectedType={selectedType}
-                onTypeChange={onTypeChange}
-                wrapperClassName="flex w-full justify-between gap-0"
-              />
+          {/* Card: tabs + location input + search button (mobile only) */}
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-5 w-full rounded-2xl bg-white px-4 py-4 shadow-lg [animation-delay:200ms] sm:hidden">
+            <div className="-mx-4 w-[calc(100%+2rem)]">
+              <div className="w-full rounded-none bg-white px-0 py-1">
+                <HeroTypeTabsRow
+                  selectedType={selectedType}
+                  onTypeChange={onTypeChange}
+                  wrapperClassName="flex w-full justify-between gap-0"
+                />
+              </div>
             </div>
+
+            <Input
+              value={location}
+              onChange={e => onLocationChange(e.target.value)}
+              placeholder="City, State or ZIP"
+              className="mt-4 h-14 w-full min-w-0 flex-1 border-border text-lg bg-[oklch(0.97_0.005_240)]"
+            />
+
+            <Button onClick={onSearch} className="mt-4 flex h-14 w-full items-center justify-center text-lg">
+              {searchLabel}
+            </Button>
           </div>
 
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 [animation-delay:300ms]">
-            <div className="w-full">
-              <Input
-                value={location}
-                onChange={e => onLocationChange(e.target.value)}
-                placeholder="City, State or ZIP"
-                className="h-14 w-full min-w-0 flex-1 border-border bg-white text-lg"
-              />
-
-              <Button onClick={onSearch} className="mt-4 flex h-14 w-full items-center justify-center text-lg">
-                {searchLabel}
-              </Button>
-            </div>
-
-            <p className="mt-5 text-center text-sm text-white">
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-5 [animation-delay:300ms] sm:hidden">
+            <p className="text-center text-sm text-white">
               Selling an RV?{" "}
               <Link href="/dashboard" className="font-medium underline underline-offset-4">
                 List it for free
@@ -203,12 +203,12 @@ export function HeroSection(props: HeroSectionProps) {
 
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 sm:mt-8 [animation-delay:300ms]">
             <div className="mx-auto w-full sm:max-w-xl sm:mx-0">
-              <div className="grid grid-cols-1 gap-3">
-                <div className="flex flex-col gap-2">
+              <div className="grid grid-cols-1 gap-5">
+                <div className="-mx-6 w-[calc(100%+3rem)] sm:block">
                   <HeroTypeTabsRow
                     selectedType={selectedType}
                     onTypeChange={onTypeChange}
-                    wrapperClassName="inline-flex w-full justify-between gap-0 border-b border-border/20 sm:border-none"
+                    wrapperClassName="inline-flex w-full justify-between gap-0"
                   />
                 </div>
 
@@ -216,7 +216,7 @@ export function HeroSection(props: HeroSectionProps) {
                   value={location}
                   onChange={e => onLocationChange(e.target.value)}
                   placeholder="City, State or ZIP"
-                  className="h-12 w-full min-w-0 flex-1 border-border bg-muted text-base"
+                  className="h-12 w-full min-w-0 flex-1 border-border text-base bg-muted"
                 />
               </div>
 

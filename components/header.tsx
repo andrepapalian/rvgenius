@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, User } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 import { useState } from "react"
 import {
   DropdownMenu,
@@ -116,11 +116,8 @@ export function Header({ variant = "default" }: HeaderProps) {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 lg:flex">
-          <Button variant="ghost" size="sm" asChild className="gap-2 text-sm font-medium">
-            <Link href="/signin">
-              <User className="h-4 w-4" />
-              <span className="ml-1">Sign In</span>
-            </Link>
+          <Button variant="secondary" size="sm" asChild className="text-sm font-medium">
+            <Link href="/signin">Sign In</Link>
           </Button>
           <Button size="sm" asChild>
             <Link href="/signup">Sign Up</Link>

@@ -14,7 +14,7 @@
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.20 0 0);
-  --muted: oklch(0.94 0 0);
+  --muted: oklch(0.97 0.005 240);
   --muted-foreground: oklch(0.45 0 0);
   --accent: oklch(0.62 0.13 248.82);
   --accent-foreground: oklch(1 0 0);
@@ -53,7 +53,7 @@
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.28 0.01 248.82);
   --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.28 0.01 248.82);
+  --muted: oklch(0.28 0.01 240);
   --muted-foreground: oklch(0.65 0 0);
   --accent: oklch(0.62 0.12 248.82);
   --accent-foreground: oklch(1 0 0);
@@ -167,5 +167,72 @@
 
   .rv-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: var(--accent);
+  }
+
+  /* Light blue-grey background for price range fields */
+  .price-range-bg {
+    /* Light neutral grey, ultra subtle cool tint */
+    background-color: oklch(0.97 0.005 240);
+  }
+
+  /* Budget calculator native range (mobile): match desktop Radix slider – thumb on top of track */
+  .range-native {
+    appearance: none;
+    -webkit-appearance: none;
+    display: block;
+    height: 1.25rem;
+    background: transparent;
+    width: 100%;
+    overflow: visible;
+  }
+  .range-native:focus {
+    outline: none;
+  }
+  /* WebKit track: thin bar (0.5rem = 8px, same as desktop h-2), thumb will sit on top */
+  .range-native::-webkit-slider-runnable-track {
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: linear-gradient(
+      to right,
+      var(--primary) 0%,
+      var(--primary) var(--value-percent),
+      var(--muted) var(--value-percent),
+      var(--muted) 100%
+    );
+  }
+  /* Thumb centered on track (negative margin), drawn on top – input height 1rem so thumb isn’t clipped */
+  .range-native::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1rem;
+    height: 1rem;
+    margin-top: -0.25rem;
+    border-radius: 9999px;
+    background: white;
+    border: 1px solid var(--primary);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  .range-native:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+  /* Firefox: input tall enough so thumb isn’t clipped */
+  .range-native::-moz-range-track {
+    height: 0.5rem;
+    border-radius: 9999px;
+    background: var(--muted);
+  }
+  .range-native::-moz-range-thumb {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 9999px;
+    background: white;
+    border: 1px solid var(--primary);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    cursor: pointer;
+  }
+  .range-native:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 4px var(--ring);
   }
 }
