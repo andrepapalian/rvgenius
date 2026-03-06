@@ -33,11 +33,11 @@ export async function generateMetadata({ params }: ListingPageProps) {
   const listing = getRVById(id)
   
   if (!listing) {
-    return { title: "Listing Not Found | RVMarket" }
+    return { title: "Listing Not Found | RVGenius" }
   }
 
   return {
-    title: `${listing.year} ${listing.make} ${listing.model} | RVMarket`,
+    title: `${listing.year} ${listing.make} ${listing.model} | RVGenius`,
     description: listing.description,
   }
 }

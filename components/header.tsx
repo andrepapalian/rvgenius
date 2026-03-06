@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
 import { useState } from "react"
@@ -26,12 +27,6 @@ export function Header({ variant = "default" }: HeaderProps) {
       ? "bg-transparent"
       : "bg-white border-b border-border"
 
-  const mobileLogoColor = isHomeVariant
-    ? mobileMenuOpen
-      ? "text-foreground"
-      : "text-white"
-    : "text-foreground"
-
   const mobileIconColor = isHomeVariant
     ? mobileMenuOpen
       ? "text-foreground"
@@ -46,22 +41,23 @@ export function Header({ variant = "default" }: HeaderProps) {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="white" strokeWidth="2">
-              <path d="M3 18V9a2 2 0 012-2h14a2 2 0 012 2v9" strokeLinecap="round" />
-              <path d="M3 18h18" strokeLinecap="round" />
-              <circle cx="7" cy="18" r="2" fill="white" stroke="none" />
-              <circle cx="17" cy="18" r="2" fill="white" stroke="none" />
-              <path d="M7 7V5" strokeLinecap="round" />
-              <path d="M17 7V5" strokeLinecap="round" />
-            </svg>
-          </div>
-          <span
-            className={`text-xl font-bold transition-colors ${mobileLogoColor} lg:text-foreground`}
-          >
-            RVMarket
-          </span>
+        <Link href="/" className="flex items-center shrink-0">
+          {isHomeVariant && !mobileMenuOpen && (
+            <Image
+              src="/images/rvgenius-logo-main-whiterv.svg"
+              alt="RVGenius"
+              width={140}
+              height={24}
+              className="h-6 w-auto lg:hidden"
+            />
+          )}
+          <Image
+            src="/images/rvgenius-logo-main.svg"
+            alt="RVGenius"
+            width={140}
+            height={24}
+            className={`h-6 w-auto lg:h-7 ${isHomeVariant && !mobileMenuOpen ? "hidden lg:block" : "block"}`}
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -96,7 +92,7 @@ export function Header({ variant = "default" }: HeaderProps) {
           </DropdownMenu>
 
           <Button variant="ghost" asChild className="text-sm font-medium text-foreground">
-            <Link href="/dashboard">Sell</Link>
+            <Link href="/create-listing">Sell</Link>
           </Button>
 
           <DropdownMenu>
@@ -117,10 +113,10 @@ export function Header({ variant = "default" }: HeaderProps) {
         {/* Desktop Actions */}
         <div className="hidden items-center gap-3 lg:flex">
           <Button variant="secondary" size="sm" asChild className="text-sm font-medium">
-            <Link href="/signin">Sign In</Link>
+            <Link href="/auth?mode=signin">Sign In</Link>
           </Button>
           <Button size="sm" asChild>
-            <Link href="/signup">Sign Up</Link>
+            <Link href="/auth">Sign Up</Link>
           </Button>
         </div>
 
@@ -168,7 +164,7 @@ export function Header({ variant = "default" }: HeaderProps) {
             Buy RVs
           </Link>
           <Link
-            href="/dashboard"
+            href="/create-listing"
             className="block rounded-lg px-4 py-3 text-lg font-medium text-foreground hover:bg-muted"
             onClick={() => setMobileMenuOpen(false)}
           >
@@ -187,10 +183,10 @@ export function Header({ variant = "default" }: HeaderProps) {
               className="mb-3 w-full bg-transparent h-14 text-lg"
               asChild
             >
-              <Link href="/signin">Sign In</Link>
+              <Link href="/auth?mode=signin">Sign In</Link>
             </Button>
             <Button className="w-full h-14 text-lg" asChild>
-              <Link href="/signup">Sign Up</Link>
+              <Link href="/auth">Sign Up</Link>
             </Button>
           </div>
         </div>

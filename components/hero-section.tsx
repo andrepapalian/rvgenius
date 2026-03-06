@@ -94,13 +94,17 @@ function HeroTypeTabsRow({
             key={option.value}
             type="button"
             onClick={() => onTypeChange(option.value)}
-            className={`flex flex-1 flex-col items-center justify-center gap-1 border-b-2 px-3 pb-2 pt-1 text-sm font-medium transition-colors sm:text-sm ${
+            className={`flex flex-1 sm:flex-none flex-col items-center justify-center gap-1 border-b-2 px-3 pb-2 pt-1 text-sm font-medium transition-colors sm:px-3 sm:text-sm ${
               isActive
-                ? "border-primary text-primary"
-                : "border-transparent text-muted-foreground hover:text-foreground"
+                ? "border-foreground text-foreground sm:border-0 sm:border-b-2 sm:border-b-foreground sm:bg-transparent sm:rounded-none"
+                : "border-transparent text-muted-foreground opacity-70 hover:text-foreground hover:opacity-100 sm:bg-transparent sm:rounded-none"
             } ${buttonClassName}`}
           >
-            <Icon className={`h-7 w-7 sm:h-7 sm:w-7 ${isActive ? "text-primary" : ""}`} />
+            <Icon
+              className={`h-7 w-7 sm:h-7 sm:w-7 ${
+                isActive ? "text-foreground" : "text-muted-foreground"
+              }`}
+            />
             <span>{option.label}</span>
           </button>
         )
@@ -177,7 +181,7 @@ export function HeroSection(props: HeroSectionProps) {
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-5 [animation-delay:300ms] sm:hidden">
             <p className="text-center text-sm text-white">
               Selling an RV?{" "}
-              <Link href="/dashboard" className="font-medium underline underline-offset-4">
+              <Link href="/create-listing" className="font-medium text-[rgb(245,158,11)] underline underline-offset-4 hover:text-[rgb(245,158,11)]">
                 List it for free
               </Link>{" "}
               and reach serious buyers.
@@ -186,52 +190,56 @@ export function HeroSection(props: HeroSectionProps) {
         </div>
 
         {/* Desktop / tablet layout: card */}
-        <div className="hidden sm:mx-0 sm:flex sm:max-w-2xl sm:flex-col sm:justify-center sm:rounded-3xl sm:bg-white sm:px-6 sm:py-8 sm:text-left sm:shadow-lg">
-          <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-[2.6rem] xl:text-[2.9rem] xl:leading-[1.1] [animation-delay:100ms]">
-            <span className="block">
-              Find Your{" "}
-              <span className="inline-block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                Perfect
-              </span>{" "}
-              RV.
-            </span>
-          </h1>
+        <div className="hidden sm:mx-0 sm:flex sm:w-[80%] sm:max-w-2xl sm:flex-col sm:items-center sm:justify-center sm:rounded-3xl sm:bg-white sm:px-6 sm:py-8 sm:text-left sm:shadow-lg">
+          <div className="w-full max-w-xl mx-auto">
+            <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-[2.6rem] xl:text-[2.9rem] xl:leading-[1.1] [animation-delay:100ms]">
+              <span className="block">
+                Find Your{" "}
+                <span className="inline-block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                  Perfect
+                </span>{" "}
+                RV.
+              </span>
+            </h1>
 
-          <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 max-w-lg text-lg text-muted-foreground [animation-delay:200ms] sm:mt-5">
-            Find your perfect RV or list yours for sale—simple and transparent.
-          </p>
+            <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 max-w-lg text-lg text-muted-foreground [animation-delay:200ms] sm:mt-5">
+              Find your perfect RV or list yours for sale—simple and transparent.
+            </p>
 
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 sm:mt-8 [animation-delay:300ms]">
-            <div className="mx-auto w-full sm:max-w-xl sm:mx-0">
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 sm:mt-8 [animation-delay:300ms]">
               <div className="grid grid-cols-1 gap-5">
-                <div className="-mx-6 w-[calc(100%+3rem)] sm:block">
+                <div className="w-full flex justify-center sm:justify-start">
                   <HeroTypeTabsRow
                     selectedType={selectedType}
                     onTypeChange={onTypeChange}
-                    wrapperClassName="inline-flex w-full justify-between gap-0"
+                    wrapperClassName="inline-flex w-full sm:w-auto justify-between gap-0 sm:gap-2"
                   />
                 </div>
 
-                <Input
-                  value={location}
-                  onChange={e => onLocationChange(e.target.value)}
-                  placeholder="City, State or ZIP"
-                  className="h-12 w-full min-w-0 flex-1 border-border text-base bg-muted"
-                />
+                <div className="grid w-full grid-cols-3 gap-3">
+                  <Input
+                    value={location}
+                    onChange={e => onLocationChange(e.target.value)}
+                    placeholder="City, State or ZIP"
+                    className="h-12 w-full min-w-0 border-border text-base bg-muted col-span-3 sm:col-span-2"
+                  />
+                  <Button onClick={onSearch} className="col-span-1 col-start-2 flex h-12 items-center justify-center text-base sm:col-start-auto sm:w-full">
+                    {searchLabel}
+                  </Button>
+                </div>
               </div>
 
-              <Button onClick={onSearch} className="mt-3 flex h-12 w-full items-center justify-center text-base">
-                {searchLabel}
-              </Button>
+              <p className="mt-5 text-left text-sm text-muted-foreground">
+                Selling an RV?{" "}
+                <Link
+                  href="/create-listing"
+                  className="font-medium text-[rgb(245,158,11)] underline-offset-4 hover:underline hover:text-[rgb(245,158,11)]"
+                >
+                  List it for free
+                </Link>{" "}
+                and reach serious buyers.
+              </p>
             </div>
-
-            <p className="mt-5 text-left text-sm text-muted-foreground">
-              Selling an RV?{" "}
-              <Link href="/dashboard" className="font-medium text-primary underline-offset-4 hover:underline">
-                List it for free
-              </Link>{" "}
-              and reach serious buyers.
-            </p>
           </div>
         </div>
       </div>

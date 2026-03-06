@@ -7,7 +7,7 @@ export function WhyChooseUsSection() {
     <section className="bg-card px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-12 text-center text-2xl font-bold text-foreground">
-          Why choose RVMarket?
+          Why choose RVGenius?
         </h2>
         <div className="grid gap-8 sm:grid-cols-3">
           <div className="flex flex-col items-center text-center">
@@ -16,7 +16,7 @@ export function WhyChooseUsSection() {
             </div>
             <h3 className="mb-2 text-lg font-semibold text-foreground">Unbiased information</h3>
             <p className="text-sm text-muted-foreground">
-              Deal ratings, vehicle history, and pricing data help you make the best decision.
+              Deal ratings and pricing data help you make the best decision.
             </p>
           </div>
           <div className="flex flex-col items-center text-center">

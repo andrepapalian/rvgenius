@@ -22,7 +22,7 @@ export function SellCtaSection() {
                 List your RV in minutes. Free to list, no hidden fees—just a simple way to connect with buyers.
               </p>
               <Button size="lg" variant="secondary" className="mt-6" asChild>
-                <Link href="/dashboard">
+                <Link href="/create-listing">
                   List your RV for free
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>

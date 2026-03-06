@@ -8,7 +8,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'RVMarket - Buy & Sell RVs',
+  title: 'RVGenius - Buy & Sell RVs',
   description: 'The marketplace for buying and selling recreational vehicles. Find your perfect RV or list yours for sale today.',
   generator: 'v0.app',
   icons: {

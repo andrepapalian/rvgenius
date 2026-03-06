@@ -26,7 +26,7 @@ export const testimonials = [
     name: "Robert & Linda Chen",
     location: "Phoenix, AZ",
     image: "/images/retired-couple-rv.jpg",
-    quote: "After retiring, we found the perfect fifth wheel for full-time living. RVMarket made it easy to compare options.",
+    quote: "After retiring, we found the perfect fifth wheel for full-time living. RVGenius made it easy to compare options.",
     rating: 5,
   },
 ]
