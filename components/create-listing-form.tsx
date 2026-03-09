@@ -12,7 +12,7 @@ import Link from "next/link"
 
 const rvTypeOptions = rvTypes.map((t) => ({ value: t.value, label: t.label }))
 
-export function CreateListingForm() {
+export function CreateListingForm({ variant = "default" }: { variant?: "default" | "dashboard" }) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [step, setStep] = useState(1)
@@ -42,9 +42,20 @@ export function CreateListingForm() {
           <Button variant="outline" className="bg-transparent" onClick={() => { setIsSuccess(false); setStep(1) }}>
             List Another RV
           </Button>
-          <Button asChild>
-            <Link href="/">Browse Listings</Link>
-          </Button>
+          {variant === "dashboard" ? (
+            <>
+              <Button asChild>
+                <Link href="/dashboard/listings">My Listings</Link>
+              </Button>
+              <Button variant="secondary" asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            </>
+          ) : (
+            <Button asChild>
+              <Link href="/">Browse Listings</Link>
+            </Button>
+          )}
         </div>
       </div>
     )

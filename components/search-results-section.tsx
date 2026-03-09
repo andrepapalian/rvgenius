@@ -493,35 +493,51 @@ export function SearchResultsSection({
               {/* Year – native select for system picker on mobile */}
               <section>
                 <h3 className="mb-3 text-sm font-semibold text-foreground">Year</h3>
-                <select
-                  value={minYear || "any"}
-                  onChange={e => setMinYear(e.target.value === "any" ? "" : e.target.value)}
-                  className="w-full rounded-md border border-border bg-muted px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  aria-label="Minimum year"
-                >
-                  <option value="any">Any year</option>
-                  {yearOptions.map(y => (
-                    <option key={y} value={String(y)}>{y} or newer</option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={minYear || "any"}
+                    onChange={e => setMinYear(e.target.value === "any" ? "" : e.target.value)}
+                    className="w-full appearance-none rounded-md border border-border bg-muted px-3 pr-8 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring [&::-ms-expand]:hidden"
+                    aria-label="Minimum year"
+                  >
+                    <option value="any">Any year</option>
+                    {yearOptions.map(y => (
+                      <option key={y} value={String(y)}>{y} or newer</option>
+                    ))}
+                  </select>
+                  <span
+                    className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-muted-foreground"
+                    aria-hidden
+                  >
+                    <ChevronDown className="h-4 w-4 shrink-0" />
+                  </span>
+                </div>
               </section>
 
               {/* Mileage – native select for system picker on mobile */}
               {showMileageFilter && (
                 <section>
                   <h3 className="mb-3 text-sm font-semibold text-foreground">Mileage</h3>
-                  <select
-                    value={maxMileage || "any"}
-                    onChange={e => setMaxMileage(e.target.value === "any" ? "" : e.target.value)}
-                    className="w-full rounded-md border border-border bg-muted px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                    aria-label="Maximum mileage"
-                  >
-                    <option value="any">Any mileage</option>
-                    <option value="5000">Under 5,000 mi</option>
-                    <option value="10000">Under 10,000 mi</option>
-                    <option value="25000">Under 25,000 mi</option>
-                    <option value="50000">Under 50,000 mi</option>
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={maxMileage || "any"}
+                      onChange={e => setMaxMileage(e.target.value === "any" ? "" : e.target.value)}
+                      className="w-full appearance-none rounded-md border border-border bg-muted px-3 pr-8 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring [&::-ms-expand]:hidden"
+                      aria-label="Maximum mileage"
+                    >
+                      <option value="any">Any mileage</option>
+                      <option value="5000">Under 5,000 mi</option>
+                      <option value="10000">Under 10,000 mi</option>
+                      <option value="25000">Under 25,000 mi</option>
+                      <option value="50000">Under 50,000 mi</option>
+                    </select>
+                    <span
+                      className="pointer-events-none absolute inset-y-0 right-2 flex items-center text-muted-foreground"
+                      aria-hidden
+                    >
+                      <ChevronDown className="h-4 w-4 shrink-0" />
+                    </span>
+                  </div>
                 </section>
               )}
 

@@ -2,6 +2,14 @@
 
 import Link from "next/link"
 import { RVCard } from "@/components/rv-card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 import type { RVListing } from "@/lib/rv-data"
 
 interface FeaturedListingsSectionProps {
@@ -9,6 +17,8 @@ interface FeaturedListingsSectionProps {
 }
 
 export function FeaturedListingsSection({ listings }: FeaturedListingsSectionProps) {
+  const featured = listings.slice(0, 12)
+
   return (
     <section className="bg-muted/50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
@@ -18,11 +28,24 @@ export function FeaturedListingsSection({ listings }: FeaturedListingsSectionPro
             View all
           </Link>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {listings.slice(0, 4).map((listing) => (
-            <RVCard key={listing.id} listing={listing} />
-          ))}
-        </div>
+        <Carousel
+          opts={{ align: "start", loop: true }}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-4">
+            {featured.map((listing) => (
+              <CarouselItem
+                key={listing.id}
+                className="pl-4 basis-full sm:basis-1/2 lg:basis-1/4"
+              >
+                <RVCard listing={listing} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+          <CarouselDots />
+        </Carousel>
       </div>
     </section>
   )

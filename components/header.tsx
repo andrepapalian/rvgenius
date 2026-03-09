@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ChevronDown } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,32 @@ interface HeaderProps {
 export function Header({ variant = "default" }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const isHomeVariant = variant === "home"
+
+  const handleMobileMenuToggle = () => {
+    const nextOpen = !mobileMenuOpen
+    setMobileMenuOpen(nextOpen)
+
+    if (nextOpen && typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+  }
+
+  useEffect(() => {
+    if (typeof document === "undefined") return
+
+    if (mobileMenuOpen) {
+      const originalBodyOverflow = document.body.style.overflow
+      const originalHtmlOverflow = document.documentElement.style.overflow
+
+      document.body.style.overflow = "hidden"
+      document.documentElement.style.overflow = "hidden"
+
+      return () => {
+        document.body.style.overflow = originalBodyOverflow
+        document.documentElement.style.overflow = originalHtmlOverflow
+      }
+    }
+  }, [mobileMenuOpen])
 
   const mobileHeaderColor =
     isHomeVariant && !mobileMenuOpen
@@ -92,7 +118,7 @@ export function Header({ variant = "default" }: HeaderProps) {
           </DropdownMenu>
 
           <Button variant="ghost" asChild className="text-sm font-medium text-foreground">
-            <Link href="/create-listing">Sell</Link>
+            <Link href="/auth">Sell</Link>
           </Button>
 
           <DropdownMenu>
@@ -124,7 +150,7 @@ export function Header({ variant = "default" }: HeaderProps) {
         <button
           type="button"
           className={`inline-flex items-center justify-center rounded-md p-2 lg:hidden transition-colors ${mobileIconColor}`}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          onClick={handleMobileMenuToggle}
         >
           <span className="sr-only">Open main menu</span>
           <div className="relative h-6 w-6">
@@ -149,7 +175,7 @@ export function Header({ variant = "default" }: HeaderProps) {
 
       {/* Mobile Menu (full-screen overlay on mobile) */}
       <div
-        className={`lg:hidden border-t border-border bg-white transform origin-top transition-all duration-300 ease-out fixed inset-x-0 top-16 bottom-0 z-40 ${
+        className={`lg:hidden border-t border-border bg-white transform origin-top transition-all duration-300 ease-out fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto ${
           mobileMenuOpen
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-2 pointer-events-none"
@@ -164,7 +190,7 @@ export function Header({ variant = "default" }: HeaderProps) {
             Buy RVs
           </Link>
           <Link
-            href="/create-listing"
+            href="/auth"
             className="block rounded-lg px-4 py-3 text-lg font-medium text-foreground hover:bg-muted"
             onClick={() => setMobileMenuOpen(false)}
           >

@@ -133,7 +133,7 @@ function HomeContent() {
 
         {/* Search Results */}
         {hasSearch && (
-          <div className="min-h-full bg-white">
+          <div className="min-h-full bg-muted">
             <SearchResultsSection
               initialType={searchParams.get("type") || ""}
               initialQuery={searchParams.get("q") || ""}
