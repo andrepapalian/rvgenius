@@ -4,8 +4,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Rows3 } from "lucide-react"
-import { Header } from "@/components/header"
 
 interface HeroSectionProps {
   selectedType: string
@@ -15,162 +13,83 @@ interface HeroSectionProps {
   onSearch: () => void
 }
 
-const DriveableIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-    className={className}
-  >
-    <path
-      d="M19.5 7.5v0.429c0 3.335 1.288 4.215 4 5.571v5H21m-1.5 -11h2V7s-1.5 -1 -2 -2.5H0.5v14h2m17 -11h-5v4h6.019M16 18.5a2.5 2.5 0 0 0 5 0m-5 0a2.5 2.5 0 0 1 5 0m-5 0H7.5m-5 0a2.5 2.5 0 0 0 5 0m-5 0a2.5 2.5 0 0 1 5 0m4 -7v-4h-8v4h8Z"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
-const TowableIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-    className={className}
-  >
-    <path
-      d="M18.5 18.5H24m-5.5 0v-14h-15S0.5 9 0.5 16.616V18.5H7m11.5 0H12m9 2h3m-17 -2a2.5 2.5 0 0 0 5 0m-5 0a2.5 2.5 0 0 1 5 0m-2 -11v4m-6 0a23.99 23.99 0 0 1 1.172 -4H15.5v4H4Z"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
 const TYPE_OPTIONS = [
   {
     value: "all",
     label: "All RVs",
-    icon: Rows3,
   },
   {
     value: "driveable",
     label: "Driveables",
-    icon: DriveableIcon,
   },
   {
     value: "towable",
     label: "Towables",
-    icon: TowableIcon,
   },
 ] as const
-
-interface HeroTypeTabsRowProps {
-  selectedType: string
-  onTypeChange: (value: string) => void
-  wrapperClassName?: string
-  buttonClassName?: string
-}
-
-function HeroTypeTabsRow({
-  selectedType,
-  onTypeChange,
-  wrapperClassName = "",
-  buttonClassName = "",
-}: HeroTypeTabsRowProps) {
-  return (
-    <div className={wrapperClassName}>
-      {TYPE_OPTIONS.map(option => {
-        const Icon = option.icon
-        const isActive =
-          (!selectedType && option.value === "all") || selectedType === option.value
-
-        return (
-          <button
-            key={option.value}
-            type="button"
-            onClick={() => onTypeChange(option.value)}
-            className={`flex flex-1 sm:flex-none flex-col items-center justify-center gap-1 border-b-2 px-3 pb-2 pt-1 text-sm font-medium transition-colors sm:px-3 sm:text-sm ${
-              isActive
-                ? "border-foreground text-foreground sm:border-0 sm:border-b-2 sm:border-b-foreground sm:bg-transparent sm:rounded-none"
-                : "border-transparent text-muted-foreground opacity-70 hover:text-foreground hover:opacity-100 sm:bg-transparent sm:rounded-none"
-            } ${buttonClassName}`}
-          >
-            <Icon
-              className={`h-7 w-7 sm:h-7 sm:w-7 ${
-                isActive ? "text-foreground" : "text-muted-foreground"
-              }`}
-            />
-            <span>{option.label}</span>
-          </button>
-        )
-      })}
-    </div>
-  )
-}
 
 export function HeroSection(props: HeroSectionProps) {
   const { selectedType, location, onTypeChange, onLocationChange, onSearch } = props
 
-  const searchLabel =
-    selectedType === "driveable"
-      ? "Search Driveables"
-      : selectedType === "towable"
-        ? "Search Towables"
-        : "Search RVs"
+  const searchLabel = "Search RVs"
 
   return (
-    <section className="relative overflow-hidden bg-white sm:bg-background">
-      <div className="absolute inset-0">
-        <Image
-          src="/images/hero-background-image.png"
-          alt="Scenic wooded campsite with RV surrounded by trees"
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
-      {/* Darken background slightly on mobile for readability */}
-      <div className="absolute inset-0 bg-black/30 sm:bg-transparent" />
-
-      {/* Header inside hero so background flows as one section */}
-      <Header variant="home" />
-
-      <div className="relative mx-auto max-w-7xl px-0 pb-10 pt-6 sm:flex sm:px-6 sm:py-14 lg:px-8 lg:py-20">
-        {/* Mobile layout: no card, full-width content */}
-        <div className="flex w-full flex-col px-4 text-center sm:hidden">
+    <section className="relative overflow-hidden bg-muted">
+      <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-6 sm:flex sm:flex-col sm:items-center sm:px-6 sm:py-12 lg:px-8 lg:py-16">
+        {/* Mobile & tablet layout: stacked content */}
+        <div className="flex w-full flex-col px-0 text-center sm:text-left lg:hidden">
           {/* Title */}
-          <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 text-4xl font-extrabold tracking-tight text-white [animation-delay:100ms]">
+          <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 text-4xl font-extrabold tracking-tight text-foreground [animation-delay:100ms]">
             <span className="block">
               Find Your{" "}
-              <span className="inline-block text-white">
+              <span className="inline-block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
                 Perfect
               </span>{" "}
               RV.
             </span>
           </h1>
 
-          {/* Card: tabs + location input + search button (mobile only) */}
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-5 w-full rounded-2xl bg-white px-4 py-4 shadow-lg [animation-delay:200ms] sm:hidden">
-            <div className="-mx-4 w-[calc(100%+2rem)]">
-              <div className="w-full rounded-none bg-white px-0 py-1">
-                <HeroTypeTabsRow
-                  selectedType={selectedType}
-                  onTypeChange={onTypeChange}
-                  wrapperClassName="flex w-full justify-between gap-0"
-                />
-              </div>
+          {/* Card: type select + location input + search button (mobile & tablet) */}
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-5 w-full rounded-md bg-white px-4 py-4 shadow-lg [animation-delay:200ms]">
+            <div className="relative">
+              <select
+                value={selectedType || "all"}
+                onChange={e => onTypeChange(e.target.value)}
+                aria-label="RV type"
+                className="h-14 w-full min-w-0 appearance-none rounded-md border border-border bg-background px-3 pr-9 text-left text-lg"
+              >
+                {TYPE_OPTIONS.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <span
+                className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted-foreground/80"
+                aria-hidden
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-4 w-4"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.085l3.71-3.854a.75.75 0 1 1 1.08 1.04l-4.25 4.417a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </span>
             </div>
 
             <Input
               value={location}
               onChange={e => onLocationChange(e.target.value)}
-              placeholder="City, State or ZIP"
-              className="mt-4 h-14 w-full min-w-0 flex-1 border-border text-lg bg-[oklch(0.97_0.005_240)]"
+              placeholder="ZIP code"
+              inputMode="numeric"
+              maxLength={5}
+              className="mt-4 h-14 w-full min-w-0 flex-1 border-border text-lg bg-background"
             />
 
             <Button onClick={onSearch} className="mt-4 flex h-14 w-full items-center justify-center text-lg">
@@ -178,8 +97,8 @@ export function HeroSection(props: HeroSectionProps) {
             </Button>
           </div>
 
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-5 [animation-delay:300ms] sm:hidden">
-            <p className="text-center text-sm text-white">
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-5 [animation-delay:300ms] lg:hidden">
+            <p className="text-center text-sm text-muted-foreground">
               Selling an RV?{" "}
               <Link href="/create-listing" className="font-medium text-[rgb(245,158,11)] underline underline-offset-4 hover:text-[rgb(245,158,11)]">
                 List it for free
@@ -187,58 +106,116 @@ export function HeroSection(props: HeroSectionProps) {
               and reach serious buyers.
             </p>
           </div>
+
+          {/* Image stacked below content on mobile & tablet */}
+          <div className="mt-6">
+            <div className="relative h-56 w-full rounded-md bg-muted overflow-hidden sm:h-64 select-none">
+              <Image
+                src="/images/hero-background-image.png"
+                alt="Scenic wooded campsite with RV surrounded by trees"
+                fill
+                className="object-contain [object-position:center]"
+                draggable={false}
+                onContextMenu={e => e.preventDefault()}
+                priority
+              />
+            </div>
+          </div>
         </div>
 
-        {/* Desktop / tablet layout: card */}
-        <div className="hidden sm:mx-0 sm:flex sm:w-[80%] sm:max-w-2xl sm:flex-col sm:items-center sm:justify-center sm:rounded-3xl sm:bg-white sm:px-6 sm:py-8 sm:text-left sm:shadow-lg">
-          <div className="w-full max-w-xl mx-auto">
-            <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-[2.6rem] xl:text-[2.9rem] xl:leading-[1.1] [animation-delay:100ms]">
-              <span className="block">
-                Find Your{" "}
-                <span className="inline-block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                  Perfect
-                </span>{" "}
-                RV.
-              </span>
-            </h1>
-
-            <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 max-w-lg text-lg text-muted-foreground [animation-delay:200ms] sm:mt-5">
-              Find your perfect RV or list yours for sale—simple and transparent.
-            </p>
-
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 sm:mt-8 [animation-delay:300ms]">
-              <div className="grid grid-cols-1 gap-5">
-                <div className="w-full flex justify-center sm:justify-start">
-                  <HeroTypeTabsRow
-                    selectedType={selectedType}
-                    onTypeChange={onTypeChange}
-                    wrapperClassName="inline-flex w-full sm:w-auto justify-between gap-0 sm:gap-2"
-                  />
-                </div>
-
-                <div className="grid w-full grid-cols-3 gap-3">
-                  <Input
-                    value={location}
-                    onChange={e => onLocationChange(e.target.value)}
-                    placeholder="City, State or ZIP"
-                    className="h-12 w-full min-w-0 border-border text-base bg-muted col-span-3 sm:col-span-2"
-                  />
-                  <Button onClick={onSearch} className="col-span-1 col-start-2 flex h-12 items-center justify-center text-base sm:col-start-auto sm:w-full">
-                    {searchLabel}
-                  </Button>
-                </div>
-              </div>
-
-              <p className="mt-5 text-left text-sm text-muted-foreground">
-                Selling an RV?{" "}
-                <Link
-                  href="/create-listing"
-                  className="font-medium text-[rgb(245,158,11)] underline-offset-4 hover:underline hover:text-[rgb(245,158,11)]"
-                >
-                  List it for free
-                </Link>{" "}
-                and reach serious buyers.
+        {/* Desktop layout: two-column hero */}
+        <div className="hidden lg:mt-10 lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-10 lg:items-center">
+          {/* Left column: text, form, selling message */}
+          <div className="space-y-6 text-left">
+            <div>
+              <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-[2.6rem] xl:text-[2.9rem] xl:leading-[1.1] [animation-delay:100ms]">
+                <span className="block">
+                  Find Your{" "}
+                  <span className="inline-block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+                    Perfect
+                  </span>{" "}
+                  RV.
+                </span>
+              </h1>
+              <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 text-base text-muted-foreground [animation-delay:200ms] sm:mt-5">
+                Find your perfect RV or list yours for sale—simple and transparent.
               </p>
+            </div>
+
+            <div className="rounded-md bg-white px-4 py-5 shadow-lg">
+              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3 items-stretch">
+                <div className="relative">
+                  <select
+                    value={selectedType || "all"}
+                    onChange={e => onTypeChange(e.target.value)}
+                    aria-label="RV type"
+                    className="h-12 w-full min-w-0 appearance-none rounded-md border border-border bg-background px-3 pr-9 text-left text-base"
+                  >
+                    {TYPE_OPTIONS.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <span
+                    className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted-foreground/80"
+                    aria-hidden
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="h-4 w-4"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.085l3.71-3.854a.75.75 0 1 1 1.08 1.04l-4.25 4.417a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06Z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <Input
+                  value={location}
+                  onChange={e => onLocationChange(e.target.value)}
+                  placeholder="ZIP code"
+                  inputMode="numeric"
+                  maxLength={5}
+                  className="h-12 w-full min-w-0 border-border bg-background text-base"
+                />
+                <Button
+                  onClick={onSearch}
+                  className="flex h-12 w-full items-center justify-center text-base"
+                >
+                  {searchLabel}
+                </Button>
+              </div>
+            </div>
+
+            <p className="text-left text-sm text-muted-foreground">
+              Selling an RV?{" "}
+              <Link
+                href="/create-listing"
+                className="font-medium text-[rgb(245,158,11)] underline-offset-4 hover:underline hover:text-[rgb(245,158,11)]"
+              >
+                List it for free
+              </Link>{" "}
+              and reach serious buyers.
+            </p>
+          </div>
+
+          {/* Right column: hero image */}
+          <div className="relative hidden sm:block">
+            <div className="relative h-64 w-full rounded-md bg-muted lg:h-80 overflow-hidden select-none">
+              <Image
+                src="/images/hero-background-image.png"
+                alt="Scenic wooded campsite with RV surrounded by trees"
+                fill
+                className="object-contain [object-position:center]"
+                draggable={false}
+                onContextMenu={e => e.preventDefault()}
+                priority
+              />
             </div>
           </div>
         </div>

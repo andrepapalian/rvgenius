@@ -13,7 +13,7 @@ export default function AuthPage() {
     <main className="relative flex min-h-screen flex-col bg-white">
       <div className="absolute inset-0 hidden sm:block">
         <Image
-          src="/images/hero-background-image.png"
+          src="/images/auth-background-image.png"
           alt=""
           fill
           className="object-cover"
@@ -23,20 +23,20 @@ export default function AuthPage() {
       </div>
 
       <div className="relative z-10 flex flex-1 flex-col sm:items-center sm:justify-center">
-        <div className="mx-auto w-full max-w-md px-4 py-12 sm:max-w-none sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-8 sm:grid sm:grid-cols-[35%_35%] sm:items-center sm:justify-center sm:gap-0">
-            <div className="flex w-full justify-start sm:justify-center">
+        <div className="mx-auto w-full max-w-md px-4 py-12 md:max-w-none md:px-6 lg:px-8">
+          <div className="flex flex-col gap-8 md:grid md:grid-cols-[35%_35%] md:items-center md:justify-center md:gap-0">
+            <div className="flex w-full justify-start md:justify-center">
               <Image
-                src="/images/rvgenius-logo-main.svg"
+                src="/images/rvgenius-logo.svg"
                 alt="RVGenius"
-                width={140}
-                height={24}
-                className="h-5 w-auto sm:h-10 sm:brightness-0 sm:invert"
+                width={180}
+                height={32}
+                className="h-6 w-auto md:h-10 lg:h-12 md:brightness-0 md:invert"
               />
             </div>
 
-            <div className="flex flex-col gap-8 sm:flex sm:items-center sm:justify-center">
-              <div className="w-full flex flex-col gap-10 sm:min-h-[600px] sm:min-w-[460px] sm:max-w-lg sm:shrink-0 sm:overflow-hidden sm:rounded-xl sm:bg-white sm:px-10 sm:py-12">
+            <div className="flex flex-col gap-8 md:flex md:items-center md:justify-center">
+              <div className="w-full flex flex-col gap-10 md:min-h-[600px] md:min-w-[460px] md:max-w-lg md:shrink-0 md:overflow-hidden md:rounded-xl md:bg-white md:px-10 md:py-12">
                 <AuthCardContent />
               </div>
             </div>

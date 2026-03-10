@@ -188,7 +188,7 @@ function CarouselPrevious({
       variant={variant}
       size={size}
       className={cn(
-        "absolute z-10 touch-manipulation hidden md:flex",
+        "absolute z-10 touch-manipulation hidden md:flex border-none bg-[#E0E0E0] text-foreground shadow-sm hover:bg-[#C4C4C4] focus-visible:ring-accent",
         orientation === "horizontal"
           ? "top-1/2 -left-12 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -216,7 +216,7 @@ function CarouselNext({
       variant={variant}
       size={size}
       className={cn(
-        "absolute z-10 touch-manipulation hidden md:flex",
+        "absolute z-10 touch-manipulation hidden md:flex border-none bg-[#E0E0E0] text-foreground shadow-sm hover:bg-[#C4C4C4] focus-visible:ring-accent",
         orientation === "horizontal"
           ? "top-1/2 -right-12 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -253,10 +253,10 @@ function CarouselDots({ className, ...props }: React.ComponentProps<"div">) {
           aria-label={`Go to slide ${index + 1}`}
           onClick={() => api?.scrollTo(index)}
           className={cn(
-            "h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            "h-2 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
             index === selectedScrollSnap
-              ? "w-6 bg-foreground"
-              : "w-2 bg-muted-foreground/40 hover:bg-muted-foreground/60"
+              ? "w-6 bg-[#BDBDBD]"
+              : "w-2 bg-[#E0E0E0] hover:bg-[#C4C4C4]"
           )}
         />
       ))}

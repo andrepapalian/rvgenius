@@ -3,7 +3,7 @@ import Image from "next/image"
 
 export function Footer() {
   return (
-    <footer className="border-t border-primary/30 bg-[oklch(0.20_0.01_248.82)]">
+    <footer className="border-t border-primary/30 bg-[#1F2D5C]">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 text-primary-foreground">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -46,9 +46,9 @@ export function Footer() {
             <Image
               src="/images/rvgenius-logo.svg"
               alt="RVGenius"
-              width={120}
-              height={20}
-              className="h-5 w-auto brightness-0 invert"
+              width={190}
+              height={32}
+              className="h-8 w-auto brightness-0 invert"
             />
           </Link>
           <p className="text-sm text-primary-foreground/80">

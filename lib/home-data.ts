@@ -12,7 +12,7 @@ export const testimonials = [
     name: "Sarah & Mike Johnson",
     location: "Denver, CO",
     image: "/images/couple-rv.jpg",
-    quote: "Found our dream Class B in just two weeks. The budget calculator helped us know exactly what we could afford!",
+    quote: "Found our dream Class B in just two weeks. RVGenius made it easy to understand what we could afford.",
     rating: 5,
   },
   {

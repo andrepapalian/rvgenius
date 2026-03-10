@@ -5,7 +5,7 @@ import { BarChart3, Shield, Wallet } from "lucide-react"
 export function WhyChooseUsSection() {
   return (
     <section className="bg-card px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <h2 className="mb-12 text-center text-2xl font-bold text-foreground">
           Why choose RVGenius?
         </h2>

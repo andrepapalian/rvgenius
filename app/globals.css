@@ -14,34 +14,37 @@ html {
   --card-foreground: oklch(0.20 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.20 0 0);
-  --primary: oklch(0.6 0.1628 250);
+  /* Primary palette based on #3E63DD */
+  --primary: #3E63DD;
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.96 0 0);
   --secondary-foreground: oklch(0.20 0 0);
   --muted: oklch(0.97 0.005 250);
   --muted-foreground: oklch(0.45 0 0);
   --placeholder: oklch(0.58 0 0);
-  --accent: oklch(0.58 0.16 250);
-  --accent-foreground: oklch(1 0 0);
+  /* Soft interactive accent based on #E1E9FF */
+  --accent: #E1E9FF;
+  --accent-foreground: oklch(0.18 0.05 250);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.88 0.01 250);
   --input: oklch(1 0 0);
-  --ring: oklch(0.6 0.1628 250);
-  --chart-1: oklch(0.6 0.1628 250);
-  --chart-2: oklch(0.65 0.14 250);
-  --chart-3: oklch(0.60 0.15 200);
-  --chart-4: oklch(0.70 0.15 70);
-  --chart-5: oklch(0.55 0.15 300);
+  --ring: #3E63DD;
+  --chart-1: #3E63DD;
+  --chart-2: color-mix(in oklch, #3E63DD 85%, oklch(1 0 0));
+  --chart-3: color-mix(in oklch, #3E63DD 75%, oklch(0.20 0 0));
+  --chart-4: color-mix(in oklch, #3E63DD 65%, oklch(1 0.02 100));
+  --chart-5: color-mix(in oklch, #3E63DD 80%, oklch(0.20 0 0));
   --radius: 0.375rem;
-  --sidebar: oklch(0.20 0.01 248.82);
+  /* Deep footer/sidebar background based on #1F2D5C */
+  --sidebar: #1F2D5C;
   --sidebar-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(0.6 0.1628 250);
+  --sidebar-primary: #3E63DD;
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.28 0.01 248);
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(0.45 0.02 248);
-  --sidebar-ring: oklch(0.6 0.1628 250);
+  --sidebar-ring: #3E63DD;
   --deal-great: oklch(0.55 0.20 145);
   --deal-good: oklch(0.60 0.18 155);
   --deal-fair: oklch(0.65 0.15 85);
@@ -54,33 +57,35 @@ html {
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.20 0.01 250);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.65 0.16 250);
+  /* Dark mode primary palette based on #3E63DD, slightly brightened */
+  --primary: color-mix(in oklch, #3E63DD 90%, oklch(0.95 0 0));
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.28 0.01 250);
   --secondary-foreground: oklch(0.95 0 0);
   --muted: oklch(0.28 0.01 250);
   --muted-foreground: oklch(0.65 0 0);
   --placeholder: oklch(0.48 0 0);
-  --accent: oklch(0.58 0.16 250);
-  --accent-foreground: oklch(1 0 0);
+  /* Dark mode accent derived from #E1E9FF for interactive details */
+  --accent: color-mix(in oklch, #E1E9FF 65%, oklch(0.15 0.01 250));
+  --accent-foreground: oklch(0.96 0 0);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.32 0.01 250);
   --input: oklch(0.25 0.01 250);
-  --ring: oklch(0.65 0.16 250);
-  --chart-1: oklch(0.65 0.16 250);
-  --chart-2: oklch(0.62 0.14 250);
-  --chart-3: oklch(0.70 0.15 200);
-  --chart-4: oklch(0.75 0.15 70);
-  --chart-5: oklch(0.65 0.15 300);
-  --sidebar: oklch(0.20 0.01 248.82);
+  --ring: color-mix(in oklch, #3E63DD 90%, oklch(0.95 0 0));
+  --chart-1: color-mix(in oklch, #3E63DD 90%, oklch(0.95 0 0));
+  --chart-2: color-mix(in oklch, #3E63DD 80%, oklch(0.15 0.01 250));
+  --chart-3: color-mix(in oklch, #3E63DD 70%, oklch(0.95 0 0));
+  --chart-4: color-mix(in oklch, #3E63DD 60%, oklch(0.90 0.02 100));
+  --chart-5: color-mix(in oklch, #3E63DD 75%, oklch(0.15 0.01 250));
+  --sidebar: #1F2D5C;
   --sidebar-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(0.65 0.16 250);
+  --sidebar-primary: color-mix(in oklch, #3E63DD 90%, oklch(0.95 0 0));
   --sidebar-primary-foreground: oklch(1 0 0);
   --sidebar-accent: oklch(0.28 0.01 248);
   --sidebar-accent-foreground: oklch(1 0 0);
   --sidebar-border: oklch(0.45 0.02 248);
-  --sidebar-ring: oklch(0.65 0.16 250);
+  --sidebar-ring: color-mix(in oklch, #3E63DD 90%, oklch(0.95 0 0));
   --deal-great: oklch(0.60 0.18 145);
   --deal-good: oklch(0.65 0.16 155);
   --deal-fair: oklch(0.70 0.15 85);
@@ -136,14 +141,27 @@ html {
     @apply bg-background text-foreground overflow-x-hidden;
   }
 
+  /* Hide horizontal scrollbar for dashboard tabs on mobile while keeping swipe scroll */
+  @media (max-width: 767px) {
+    .mobile-dashboard-tabs {
+      -ms-overflow-style: none; /* IE/Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .mobile-dashboard-tabs::-webkit-scrollbar {
+      display: none; /* Safari/Chrome */
+    }
+  }
+
   .rv-scrollbar {
-    scrollbar-color: var(--primary) transparent;
+    /* Neutral scrollbar thumb for browse-by-body-type scroller */
+    scrollbar-color: #E0E0E0 transparent;
   }
 
   @media (max-width: 767px) {
     .rv-scrollbar {
       scrollbar-width: thin;
-      scrollbar-color: var(--primary) var(--muted);
+      scrollbar-color: #E0E0E0 var(--muted);
     }
     .rv-scrollbar::-webkit-scrollbar {
       height: 6px;
@@ -168,12 +186,12 @@ html {
   }
 
   .rv-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--primary);
+    background-color: #E0E0E0;
     border-radius: 999px;
   }
 
   .rv-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: var(--accent);
+    background-color: #C4C4C4;
   }
 
   /* Light blue-grey background for price range fields */
@@ -201,8 +219,8 @@ html {
     border-radius: 9999px;
     background: linear-gradient(
       to right,
-      var(--primary) 0%,
-      var(--primary) var(--value-percent),
+      var(--accent) 0%,
+      var(--accent) var(--value-percent),
       var(--muted) var(--value-percent),
       var(--muted) 100%
     );
@@ -216,7 +234,7 @@ html {
     margin-top: -0.25rem;
     border-radius: 9999px;
     background: white;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--accent);
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     cursor: pointer;
     pointer-events: auto;
@@ -235,7 +253,7 @@ html {
     height: 1rem;
     border-radius: 9999px;
     background: white;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--accent);
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     cursor: pointer;
   }

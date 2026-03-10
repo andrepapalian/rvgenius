@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react"
 export function SellCtaSection() {
   return (
     <section className="bg-card px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <div className="relative overflow-hidden rounded-2xl bg-primary">
           <div className="absolute right-0 top-0 h-full w-1/2 opacity-20">
             <Image src="/images/rv-hero.jpg" alt="" fill className="object-cover" />

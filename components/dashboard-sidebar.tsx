@@ -18,9 +18,9 @@ import { cn } from "@/lib/utils"
 
 export const dashboardNavItems = [
   { title: "Listings", href: "/dashboard/listings", icon: List },
-  { title: "Messages", href: "/dashboard/messages", icon: MessageSquare },
+  { title: "Requests", href: "/dashboard/messages", icon: MessageSquare },
   { title: "Saved RVs", href: "/dashboard/saved", icon: Heart },
-  { title: "Profile", href: "/dashboard/profile", icon: Settings },
+  { title: "Settings", href: "/dashboard/profile", icon: Settings },
 ]
 
 export function DashboardSidebar() {
@@ -92,7 +92,7 @@ export function MobileAccountTabs() {
 
   return (
     <nav
-      className="flex h-14 flex-1 flex-nowrap items-center gap-1 overflow-x-auto border-b border-border bg-card px-2 lg:hidden"
+      className="flex h-14 flex-1 flex-nowrap items-center gap-1 overflow-x-auto border-b border-border bg-card px-2 lg:hidden mobile-dashboard-tabs"
       aria-label="My Account"
     >
       <div className="flex shrink-0 gap-1">
@@ -107,8 +107,8 @@ export function MobileAccountTabs() {
               className={cn(
                 "shrink-0 whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-muted text-foreground"
-                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                  ? "bg-[#F9F9F9] text-foreground"
+                  : "text-muted-foreground hover:bg-[#F9F9F9] hover:text-foreground"
               )}
             >
               {item.title}

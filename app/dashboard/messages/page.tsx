@@ -8,7 +8,7 @@ export default function DashboardMessagesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Messages</h1>
+        <h1 className="text-2xl font-bold text-foreground">Requests</h1>
         <p className="mt-1 text-muted-foreground">
           Contact requests you&apos;ve sent and received. Manage who can reach you.
         </p>

@@ -271,7 +271,7 @@ export function CreateListingForm({ variant = "default" }: { variant?: "default"
               />
             </div>
 
-            <div className="rounded-xl bg-muted/50 p-4">
+            <div className="rounded-xl bg-[#F9F9F9] p-4">
               <p className="mb-3 text-sm font-medium text-foreground">Contact Information</p>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>

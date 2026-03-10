@@ -3,24 +3,22 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, LogIn, UserPlus, User } from "lucide-react"
 import { useEffect, useState } from "react"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu"
 
-type HeaderVariant = "default" | "home"
-
 interface HeaderProps {
-  variant?: HeaderVariant
+  sticky?: boolean
 }
 
-export function Header({ variant = "default" }: HeaderProps) {
+export function Header({ sticky = true }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const isHomeVariant = variant === "home"
 
   const handleMobileMenuToggle = () => {
     const nextOpen = !mobileMenuOpen
@@ -48,46 +46,66 @@ export function Header({ variant = "default" }: HeaderProps) {
     }
   }, [mobileMenuOpen])
 
-  const mobileHeaderColor =
-    isHomeVariant && !mobileMenuOpen
-      ? "bg-transparent"
-      : "bg-white border-b border-border"
+  const mobileHeaderColor = "bg-white border-b border-border"
 
-  const mobileIconColor = isHomeVariant
-    ? mobileMenuOpen
-      ? "text-foreground"
-      : "text-white"
-    : "text-foreground"
+  const mobileIconColor = "text-foreground"
 
-  const closedBarColor = isHomeVariant ? "bg-white" : "bg-foreground"
+  // Always use dark bars for the mobile menu icon
+  const closedBarColor = "bg-foreground"
 
   return (
     <header
-      className={`z-50 w-full relative transition-colors duration-300 ${mobileHeaderColor} lg:bg-card lg:border-b lg:border-border`}
+      className={`z-50 w-full ${sticky ? "sticky top-0" : "relative"} transition-colors duration-300 ${mobileHeaderColor} lg:bg-card lg:border-b lg:border-border`}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Logo */}
-        <Link href="/" className="flex items-center shrink-0">
-          {isHomeVariant && !mobileMenuOpen && (
-            <Image
-              src="/images/rvgenius-logo-main-whiterv.svg"
-              alt="RVGenius"
-              width={140}
-              height={24}
-              className="h-6 w-auto lg:hidden"
+        {/* Mobile: menu button on the left */}
+        <button
+          type="button"
+          className={`inline-flex items-center justify-center rounded-md p-2 lg:hidden transition-colors ${mobileIconColor}`}
+          onClick={handleMobileMenuToggle}
+        >
+          <span className="sr-only">Open main menu</span>
+          <div className="relative h-6 w-6">
+            {/* Top bar (medium length, left-aligned) */}
+            <span
+              className={`absolute block h-[3px] w-5 rounded origin-center transition-transform duration-300 ease-out ${
+                mobileMenuOpen
+                  ? "left-0 top-1/2 w-full translate-y-0 rotate-45 bg-foreground"
+                  : `left-0 top-[4px] ${closedBarColor}`
+              }`}
             />
-          )}
+            {/* Middle bar (longest, left-aligned) */}
+            <span
+              className={`absolute block h-[3px] w-6 rounded transition-opacity duration-200 ease-out ${
+                mobileMenuOpen
+                  ? "left-0 top-1/2 w-full opacity-0 bg-foreground"
+                  : `left-0 top-[12px] opacity-100 ${closedBarColor}`
+              }`}
+            />
+            {/* Bottom bar (shortest, left-aligned) */}
+            <span
+              className={`absolute block h-[3px] w-4 rounded origin-center transition-transform duration-300 ease-out ${
+                mobileMenuOpen
+                  ? "left-0 top-1/2 w-full translate-y-0 -rotate-45 bg-foreground"
+                  : `left-0 top-[20px] ${closedBarColor}`
+              }`}
+            />
+          </div>
+        </button>
+
+        {/* Logo (centered on mobile) */}
+        <Link href="/" className="flex flex-1 justify-center items-center shrink-0 lg:flex-none lg:justify-start">
           <Image
-            src="/images/rvgenius-logo-main.svg"
+            src="/images/rvgenius-logo.svg"
             alt="RVGenius"
-            width={140}
-            height={24}
-            className={`h-6 w-auto lg:h-7 ${isHomeVariant && !mobileMenuOpen ? "hidden lg:block" : "block"}`}
+            width={180}
+            height={32}
+            className="h-8 w-auto lg:h-9"
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden lg:flex flex-1 items-center justify-center gap-1">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="text-sm font-medium text-foreground">
@@ -146,39 +164,21 @@ export function Header({ variant = "default" }: HeaderProps) {
           </Button>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          type="button"
-          className={`inline-flex items-center justify-center rounded-md p-2 lg:hidden transition-colors ${mobileIconColor}`}
-          onClick={handleMobileMenuToggle}
-        >
-          <span className="sr-only">Open main menu</span>
-          <div className="relative h-6 w-6">
-            <span
-              className={`absolute left-0 top-1/2 block h-[2px] w-full rounded transition-transform duration-300 ease-out origin-center ${
-                mobileMenuOpen ? "translate-y-0 rotate-45 bg-foreground" : `-translate-y-1.5 ${closedBarColor}`
-              }`}
-            />
-            <span
-              className={`absolute left-0 top-1/2 block h-[2px] w-full rounded ${
-                mobileMenuOpen ? "opacity-0 bg-foreground" : `opacity-100 ${closedBarColor}`
-              }`}
-            />
-            <span
-              className={`absolute left-0 top-1/2 block h-[2px] w-full rounded transition-transform duration-300 ease-out origin-center ${
-                mobileMenuOpen ? "translate-y-0 -rotate-45 bg-foreground" : `translate-y-1.5 ${closedBarColor}`
-              }`}
-            />
-          </div>
-        </button>
+        {/* Mobile: unsigned account link on the right */}
+        <div className="flex items-center gap-3 lg:hidden">
+          <Link
+            href="/auth"
+            className="inline-flex shrink-0 items-center justify-center rounded-full p-2 text-foreground outline-none ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          >
+            <User className="h-6 w-6 stroke-[1.8]" />
+          </Link>
+        </div>
       </div>
 
-      {/* Mobile Menu (full-screen overlay on mobile) */}
+      {/* Mobile Menu (full-screen overlay on mobile, no open/close animation) */}
       <div
-        className={`lg:hidden border-t border-border bg-white transform origin-top transition-all duration-300 ease-out fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto ${
-          mobileMenuOpen
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-2 pointer-events-none"
+        className={`lg:hidden border-t border-border bg-white fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto ${
+          mobileMenuOpen ? "pointer-events-auto" : "hidden pointer-events-none"
         }`}
       >
         <div className="space-y-1 px-4 py-4 h-full">

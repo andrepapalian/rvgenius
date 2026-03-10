@@ -39,10 +39,10 @@ export function ProfileForm() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-900 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-200">
-            When a buyer clicks &quot;Contact Seller&quot; on your listing, Public shows your email and phone right away. Email Only or Phone Only shows just that field. Private sends the request to your Messages so you choose who to share with.
+            When a buyer clicks &quot;Contact Seller&quot; on your listing, Public shows your email and phone right away. Email Only or Phone Only shows just that field. Private sends the request to your Requests tab so you choose who to share with.
           </div>
           <RadioGroup defaultValue="private" className="flex flex-col gap-2">
-            <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 hover:bg-muted/50 [&:has([data-state=checked])]:bg-muted/50">
+            <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 hover:bg-[#F9F9F9] [&:has([data-state=checked])]:bg-[#F9F9F9]">
               <RadioGroupItem value="public" id="privacy-public" className="shrink-0" />
               <div>
                 <p className="font-medium">Public</p>
@@ -51,7 +51,7 @@ export function ProfileForm() {
                 </p>
               </div>
             </label>
-            <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 hover:bg-muted/50 [&:has([data-state=checked])]:bg-muted/50">
+            <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 hover:bg-[#F9F9F9] [&:has([data-state=checked])]:bg-[#F9F9F9]">
               <RadioGroupItem value="email-only" id="privacy-email" className="shrink-0" />
               <div>
                 <p className="font-medium">Email Only</p>
@@ -60,7 +60,7 @@ export function ProfileForm() {
                 </p>
               </div>
             </label>
-            <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 hover:bg-muted/50 [&:has([data-state=checked])]:bg-muted/50">
+            <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 hover:bg-[#F9F9F9] [&:has([data-state=checked])]:bg-[#F9F9F9]">
               <RadioGroupItem value="phone-only" id="privacy-phone" className="shrink-0" />
               <div>
                 <p className="font-medium">Phone Only</p>
@@ -69,12 +69,12 @@ export function ProfileForm() {
                 </p>
               </div>
             </label>
-            <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 hover:bg-muted/50 [&:has([data-state=checked])]:bg-muted/50">
+            <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3 hover:bg-[#F9F9F9] [&:has([data-state=checked])]:bg-[#F9F9F9]">
               <RadioGroupItem value="private" id="privacy-private" className="shrink-0" />
               <div>
                 <p className="font-medium">Private</p>
                 <p className="text-xs text-muted-foreground">
-                  Requests go to your Messages; you choose who to share your contact info with.
+                  Requests go to your Requests tab; you choose who to share your contact info with.
                 </p>
               </div>
             </label>

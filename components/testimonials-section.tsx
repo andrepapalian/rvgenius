@@ -6,7 +6,7 @@ import { testimonials } from "@/lib/home-data"
 
 export function TestimonialsSection() {
   return (
-    <section className="bg-muted/50 px-4 py-16 sm:px-6 lg:px-8">
+    <section className="bg-[#F9F9F9] px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <h2 className="mb-4 text-center text-2xl font-bold text-foreground">
           What RVers are saying

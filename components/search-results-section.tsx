@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import { useState, useMemo, useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -155,6 +155,17 @@ export function SearchResultsSection({
         return sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     }
   }, [filteredListings, sortBy])
+
+  useEffect(() => {
+    if (!showMobileFilters) return
+
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    return () => {
+      document.body.style.overflow = originalOverflow
+    }
+  }, [showMobileFilters])
 
   const priceFilterLabel =
     parsedMinPrice != null || parsedMaxPrice != null
@@ -561,7 +572,7 @@ export function SearchResultsSection({
               {/* Deal rating */}
               <section>
                 <h3 className="mb-3 text-sm font-semibold text-foreground">Deal Rating</h3>
-                <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border bg-muted/50 px-3 py-2.5 text-sm">
+                <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-border bg-[#F9F9F9] px-3 py-2.5 text-sm">
                   <input
                     type="checkbox"
                     checked={dealOnly}

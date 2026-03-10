@@ -20,8 +20,8 @@ export function FeaturedListingsSection({ listings }: FeaturedListingsSectionPro
   const featured = listings.slice(0, 12)
 
   return (
-    <section className="bg-muted/50 px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+    <section className="bg-[#F9F9F9] px-4 py-12 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-bold text-foreground">Featured RVs near you</h2>
           <Link href="/?all=true" className="text-sm font-medium text-primary hover:underline">

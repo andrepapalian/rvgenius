@@ -135,21 +135,21 @@ export default async function ListingPage({ params }: ListingPageProps) {
               <div className="rounded-xl bg-card p-5">
                 <h2 className="text-lg font-semibold text-foreground">Vehicle Overview</h2>
                 <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
-                  <div className="rounded-lg bg-muted/50 p-3 text-center">
+                  <div className="rounded-lg bg-[#F9F9F9] p-3 text-center">
                     <p className="text-2xl font-bold text-foreground">{listing.year}</p>
                     <p className="text-xs text-muted-foreground">Year</p>
                   </div>
-                  <div className="rounded-lg bg-muted/50 p-3 text-center">
+                  <div className="rounded-lg bg-[#F9F9F9] p-3 text-center">
                     <p className="text-2xl font-bold text-foreground">
                       {listing.mileage > 0 ? `${Math.round(listing.mileage / 1000)}k` : "New"}
                     </p>
                     <p className="text-xs text-muted-foreground">Miles</p>
                   </div>
-                  <div className="rounded-lg bg-muted/50 p-3 text-center">
+                  <div className="rounded-lg bg-[#F9F9F9] p-3 text-center">
                     <p className="text-2xl font-bold text-foreground">{listing.length}</p>
                     <p className="text-xs text-muted-foreground">Feet</p>
                   </div>
-                  <div className="rounded-lg bg-muted/50 p-3 text-center">
+                  <div className="rounded-lg bg-[#F9F9F9] p-3 text-center">
                     <p className="text-2xl font-bold text-foreground">{listing.sleeps}</p>
                     <p className="text-xs text-muted-foreground">Sleeps</p>
                   </div>
@@ -249,7 +249,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
                 </div>
 
                 {/* Safety Tips */}
-                <div className="rounded-xl bg-muted/50 p-4">
+                <div className="rounded-xl bg-[#F9F9F9] p-4">
                   <div className="flex items-start gap-3">
                     <ShieldCheck className="mt-0.5 h-5 w-5 text-primary" />
                     <div>
