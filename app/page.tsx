@@ -12,7 +12,6 @@ import { WhyChooseUsSection } from "@/components/why-choose-us-section"
 import { FeaturedListingsSection } from "@/components/featured-listings-section"
 import { SearchResultsSection } from "@/components/search-results-section"
 import { filterRVs } from "@/lib/rv-data"
-import { HomeTrustBanner } from "@/components/home-trust-banner"
 import { BudgetCalculatorSection } from "@/components/budget-calculator-section"
 
 function HomeContent() {
@@ -60,8 +59,6 @@ function HomeContent() {
             onSearch={handleSearch}
           />
         )}
-
-        {!hasSearch && <HomeTrustBanner />}
 
         {!hasSearch && <BudgetCalculatorSection />}
 

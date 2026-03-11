@@ -9,7 +9,7 @@ export function DashboardTabBanner() {
   const pathname = usePathname()
 
   return (
-    <div className="sticky top-0 z-40 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+    <div className="sticky top-0 z-40 w-full border-b border-border/80 bg-card/80 backdrop-blur-md">
       <nav
         className="mx-auto flex w-full max-w-7xl flex-nowrap items-center justify-start gap-1 overflow-x-auto px-4 py-3 sm:gap-2 sm:px-6 lg:justify-center lg:px-8 mobile-dashboard-tabs"
         aria-label="My Account"

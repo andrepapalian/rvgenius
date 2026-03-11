@@ -1,12 +1,11 @@
 import { notFound } from "next/navigation"
 import Image from "next/image"
-import Link from "next/link"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { getRVById, rvListings } from "@/lib/rv-data"
+import { ListingBackLink } from "@/components/listing-back-link"
 import {
-  ArrowLeft,
   MapPin,
   Phone,
   Mail,
@@ -17,9 +16,18 @@ import {
 } from "lucide-react"
 
 interface ListingPageProps {
-  params: Promise<{
-    id: string
-  }>
+  // In this project, params may be passed as a Promise from Next.
+  params:
+    | {
+        id: string
+      }
+    | Promise<{
+        id: string
+      }>
+  searchParams?: {
+    from?: string
+    view?: string
+  }
 }
 
 export async function generateStaticParams() {
@@ -28,8 +36,19 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: ListingPageProps) {
-  const { id } = await params
+export async function generateMetadata({
+  params,
+}: {
+  params:
+    | {
+        id: string
+      }
+    | Promise<{
+        id: string
+      }>
+}) {
+  const resolvedParams = "then" in (params as any) ? await (params as any) : (params as any)
+  const { id } = resolvedParams
   const listing = getRVById(id)
   
   if (!listing) {
@@ -55,8 +74,9 @@ function getDealInfo(deal: string) {
   }
 }
 
-export default async function ListingPage({ params }: ListingPageProps) {
-  const { id } = await params
+export default async function ListingPage({ params, searchParams }: ListingPageProps) {
+  const resolvedParams = "then" in (params as any) ? await (params as any) : (params as any)
+  const { id } = resolvedParams
   const listing = getRVById(id)
 
   if (!listing) {
@@ -73,13 +93,7 @@ export default async function ListingPage({ params }: ListingPageProps) {
         {/* Breadcrumb */}
         <div className="bg-card">
           <div className="mx-auto max-w-6xl px-4 py-3 sm:px-6 lg:px-8">
-            <Link
-              href="/?all=1"
-              className="inline-flex items-center text-sm text-primary hover:underline"
-            >
-              <ArrowLeft className="mr-1 h-4 w-4" />
-              Back to search results
-            </Link>
+            <ListingBackLink />
           </div>
         </div>
 

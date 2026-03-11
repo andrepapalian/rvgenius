@@ -41,9 +41,9 @@ export function HeroSection(props: HeroSectionProps) {
           {/* Title */}
           <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-6 text-4xl font-extrabold tracking-tight text-foreground [animation-delay:100ms]">
             <span className="block">
-              Find Your{" "}
+              Find your{" "}
               <span className="inline-block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                Perfect
+                dream
               </span>{" "}
               RV.
             </span>
@@ -100,7 +100,10 @@ export function HeroSection(props: HeroSectionProps) {
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-5 [animation-delay:300ms] lg:hidden">
             <p className="text-center text-sm text-muted-foreground">
               Selling an RV?{" "}
-              <Link href="/create-listing" className="font-medium text-[rgb(245,158,11)] underline underline-offset-4 hover:text-[rgb(245,158,11)]">
+              <Link
+                href="/auth"
+                className="font-medium text-[rgb(245,158,11)] underline underline-offset-4 hover:text-[rgb(245,158,11)]"
+              >
                 List it for free
               </Link>{" "}
               and reach serious buyers.
@@ -130,15 +133,15 @@ export function HeroSection(props: HeroSectionProps) {
             <div>
               <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-[2.6rem] xl:text-[2.9rem] xl:leading-[1.1] [animation-delay:100ms]">
                 <span className="block">
-                  Find Your{" "}
+                  Find your{" "}
                   <span className="inline-block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                    Perfect
+                    dream
                   </span>{" "}
                   RV.
                 </span>
               </h1>
               <p className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both mt-4 text-base text-muted-foreground [animation-delay:200ms] sm:mt-5">
-                Find your perfect RV or list yours for sale—simple and transparent.
+                Find the perfect RV or list yours for sale—simple and transparent.
               </p>
             </div>
 
@@ -195,7 +198,7 @@ export function HeroSection(props: HeroSectionProps) {
             <p className="text-left text-sm text-muted-foreground">
               Selling an RV?{" "}
               <Link
-                href="/create-listing"
+                href="/auth"
                 className="font-medium text-[rgb(245,158,11)] underline-offset-4 hover:underline hover:text-[rgb(245,158,11)]"
               >
                 List it for free

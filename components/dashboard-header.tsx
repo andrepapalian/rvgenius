@@ -31,7 +31,7 @@ export function DashboardHeader() {
     .join("")
 
   return (
-    <header className="z-50 w-full shrink-0 border-b border-border bg-card sticky top-0">
+    <header className="z-50 w-full shrink-0 border-b border-border/80 bg-card/80 backdrop-blur-md">
       <div className="relative mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Mobile menu button (left of logo) */}
         <button
