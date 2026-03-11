@@ -126,10 +126,10 @@ export function HeroSection(props: HeroSectionProps) {
           </div>
         </div>
 
-        {/* Desktop layout: two-column hero */}
-        <div className="hidden lg:mt-10 lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-10 lg:items-center">
-          {/* Left column: text, form, selling message */}
-          <div className="space-y-6 text-left">
+        {/* Desktop layout: stacked hero, centered */}
+        <div className="hidden lg:mt-10 lg:flex lg:w-full lg:max-w-7xl lg:flex-col lg:items-center lg:gap-10">
+          {/* Text, form, selling message */}
+          <div className="space-y-6 text-center max-w-2xl">
             <div>
               <h1 className="animate-in fade-in slide-in-from-bottom-2 duration-500 fill-mode-both text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-[2.6rem] xl:text-[2.9rem] xl:leading-[1.1] [animation-delay:100ms]">
                 <span className="block">
@@ -145,7 +145,7 @@ export function HeroSection(props: HeroSectionProps) {
               </p>
             </div>
 
-            <div className="rounded-md bg-white px-4 py-5 shadow-lg">
+            <div className="mx-auto max-w-xl rounded-md bg-white px-4 py-5 shadow-lg">
               <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3 items-stretch">
                 <div className="relative">
                   <select
@@ -195,7 +195,7 @@ export function HeroSection(props: HeroSectionProps) {
               </div>
             </div>
 
-            <p className="text-left text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Selling an RV?{" "}
               <Link
                 href="/auth"
@@ -207,8 +207,8 @@ export function HeroSection(props: HeroSectionProps) {
             </p>
           </div>
 
-          {/* Right column: hero image */}
-          <div className="relative hidden sm:block">
+          {/* Hero image stacked below on desktop */}
+          <div className="relative w-full max-w-xl">
             <div className="relative h-64 w-full rounded-md bg-muted lg:h-80 overflow-hidden select-none">
               <Image
                 src="/images/hero-background-image.png"
