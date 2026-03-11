@@ -186,12 +186,12 @@ html {
   }
 
   .rv-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #E0E0E0;
+    background-color: #D0D0D0 !important;
     border-radius: 999px;
   }
 
   .rv-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #C4C4C4;
+    background-color: #FFFFFF !important;
   }
 
   /* Light blue-grey background for price range fields */

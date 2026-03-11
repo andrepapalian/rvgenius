@@ -8,11 +8,11 @@ import { Footer } from "@/components/footer"
 import { HeroSection } from "@/components/hero-section"
 import { BrowseByBodyType } from "@/components/browse-by-body-type"
 import { SellCtaSection } from "@/components/sell-cta-section"
-import { WhyChooseUsSection } from "@/components/why-choose-us-section"
 import { FeaturedListingsSection } from "@/components/featured-listings-section"
 import { SearchResultsSection } from "@/components/search-results-section"
-import { filterRVs } from "@/lib/rv-data"
 import { BudgetCalculatorSection } from "@/components/budget-calculator-section"
+import { FaqSection } from "@/components/faq-section"
+import { filterRVs } from "@/lib/rv-data"
 
 function HomeContent() {
   const searchParams = useSearchParams()
@@ -66,7 +66,7 @@ function HomeContent() {
 
         {!hasSearch && <SellCtaSection />}
 
-        {!hasSearch && <WhyChooseUsSection />}
+        {!hasSearch && <FaqSection />}
 
         {!hasSearch && <FeaturedListingsSection listings={listings} />}
 

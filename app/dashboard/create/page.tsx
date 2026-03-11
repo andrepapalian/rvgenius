@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { CreateListingForm } from "@/components/create-listing-form"
 
 export default function DashboardCreatePage() {
@@ -12,12 +12,6 @@ export default function DashboardCreatePage() {
       </div>
 
       <Card className="overflow-hidden">
-        <CardHeader className="border-b border-border">
-          <CardTitle>New listing</CardTitle>
-          <CardDescription>
-            Vehicle info → Photos & description → Price & contact
-          </CardDescription>
-        </CardHeader>
         <CardContent className="p-6 sm:p-8">
           <CreateListingForm variant="dashboard" />
         </CardContent>
